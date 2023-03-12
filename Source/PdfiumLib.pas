@@ -1,12 +1,21 @@
+{ 2023-03-11
+  FreePascal port for ahausladen/PdfiumLib (Updated to chromium/5052)
+                                https://github.com/ahausladen/PdfiumLib
+  Tested with: Lazarus(ver2.2.2)/Freepascal(version 3.2.2)
+}
 {$A8,B-,E-,F-,G+,H+,I+,J-,K-,M-,N-,P+,Q-,R-,S-,T-,U-,V+,X+,Z1}
+{$DEFINE FPC}  // based on: https://github.com/ahausladen/PdfiumLib
+{$DEFINE MSWINDOWS}
+
 {$STRINGCHECKS OFF} // It only slows down Delphi strings in Delphi 2009/2010
 
 // Use DLLs (x64, x86) from https://github.com/bblanchon/pdfium-binaries
 //
 // DLL Version: chromium/5052
 
-unit PdfiumLib;
+unit pdfiumlib;
 
+{$MODE Delphi}
 {$SCOPEDENUMS ON}
 
 {.$DEFINE DLLEXPORT} // stdcall in WIN32 instead of CDECL in WIN32 (The library switches between those from release to release)
@@ -18,11 +27,16 @@ unit PdfiumLib;
 interface
 
 uses
+{$IFDEF FPC}
+  Windows, LCLIntf, LCLType, LMessages;
+{$ELSE}
+
   {$IF CompilerVersion >= 23.0} // XE2+
   WinApi.Windows;
   {$ELSE}
   Windows;
   {$IFEND}
+{$ENDIF}
 
 type
   // Delphi version compatibility types
@@ -8892,10 +8906,15 @@ begin
 
   {$IFDEF CPUX64}
   // Pdfium requires all arithmetic exceptions to be masked in 64bit mode
+{$IFDEF FPC}
+  SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide,
+                    exOverflow, exUnderflow, exPrecision]);
+
+{$ELSE}
   if GetExceptionMask <> exAllArithmeticExceptions then
     SetExceptionMask(exAllArithmeticExceptions);
   {$ENDIF CPUX64}
-
+{$ENDIF}
   if DllFileName <> '' then
     PdfiumModule := SafeLoadLibrary(DllFileName)
   else
@@ -8903,6 +8922,9 @@ begin
 
   if PdfiumModule = 0 then
   begin
+{$IFDEF FPC}
+    RaiseLastOSError(GetLastError);
+{$ELSE}
     {$IF CompilerVersion >= 24.0} // XE3+
     if DllFileName <> '' then
       RaiseLastOSError(GetLastError, '.'#10#10 + DllFileName)
@@ -8911,6 +8933,7 @@ begin
     {$ELSE}
     RaiseLastOSError;
     {$IFEND}
+{$endif}
   end;
 
   for I := 0 to Length(ImportFuncs) - 1 do

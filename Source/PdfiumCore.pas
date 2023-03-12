@@ -1,13 +1,21 @@
+{ 2023-03-11
+  FreePascal port for ahausladen/PdfiumLib (Updated to chromium/5052)
+                                https://github.com/ahausladen/PdfiumLib
+  Tested with: Lazarus(ver2.2.2)/Freepascal(version 3.2.2)
+}
 {$A8,B-,E-,F-,G+,H+,I+,J-,K-,M-,N-,P+,Q-,R-,S-,T-,U-,V+,X+,Z1}
+{$DEFINE FPC} // based on: https://github.com/ahausladen/PdfiumLib
 {$STRINGCHECKS OFF}
 
-unit PdfiumCore;
+unit pdfiumcore;
+
+{$MODE Delphi}
 
 interface
 
 uses
-  Windows, WinSpool, Types, SysUtils, Classes, Contnrs, PdfiumLib, Graphics;
-
+{$IFDEF FPC} LCLIntf, LCLType, {LMessages,} {$ELSE}  WinSpool,{$ENDIF}
+  Windows, Types, SysUtils, Classes, Contnrs, PdfiumLib, Graphics;
 const
   // DIN A4
   PdfDefaultPageWidth = 595;
@@ -218,7 +226,6 @@ type
 
     procedure ApplyChanges;
     procedure Flatten(AFlatPrint: Boolean);
-
     function FormEventFocus(const Shift: TShiftState; PageX, PageY: Double): Boolean;
     function FormEventMouseWheel(const Shift: TShiftState; WheelDelta: Integer; PageX, PageY: Double): Boolean;
     function FormEventMouseMove(const Shift: TShiftState; PageX, PageY: Double): Boolean;
@@ -406,7 +413,9 @@ type
     procedure SaveToFile(const AFileName: string; Option: TPdfDocumentSaveOption = dsoRemoveSecurity; FileVersion: Integer = -1);
     procedure SaveToStream(Stream: TStream; Option: TPdfDocumentSaveOption = dsoRemoveSecurity; FileVersion: Integer = -1);
     procedure SaveToBytes(var Bytes: TBytes; Option: TPdfDocumentSaveOption = dsoRemoveSecurity; FileVersion: Integer = -1);
-
+{$IFDEF FPC}
+    procedure Pg2BMP(idx: integer; bmp: TBitMap);
+{$ENDIF}
     function NewDocument: Boolean;
     class function CreateNPagesOnOnePageDocument(Source: TPdfDocument; NewPageWidth, NewPageHeight: Double; NumPagesXAxis, NumPagesYAxis: Integer): TPdfDocument; overload;
     class function CreateNPagesOnOnePageDocument(Source: TPdfDocument; NumPagesXAxis, NumPagesYAxis: Integer): TPdfDocument; overload;
@@ -554,7 +563,11 @@ end;
 
 function TEncodingAccess.GetMemChars(Bytes: PByte; ByteCount: Integer; Chars: PChar; CharCount: Integer): Integer;
 begin
+{$IFDEF FPC}
+  Result := GetChars(Bytes, ByteCount, PUnicodeChar(PWideChar(chars)), CharCount);//PWideChar(UTF8Decode(Chars)), CharCount);
+{$ELSE}
   Result := GetChars(Bytes, ByteCount, Chars, CharCount);
+{$ENDIF}
 end;
 
 function SetThreadPdfUnsupportedFeatureHandler(const Handler: TPdfUnsupportedFeatureHandler): TPdfUnsupportedFeatureHandler;
@@ -563,10 +576,16 @@ begin
   ThreadPdfUnsupportedFeatureHandler := Handler;
 end;
 
+{$IFDEF FPC}
+function GetFileSizeEx(hFile: THandle; var lpFileSize: Int64): Bool; stdcall;
+  external kernel32 name 'GetFileSizeEx';
+
+{$ELSE}
 {$IF not declared(GetFileSizeEx)}
 function GetFileSizeEx(hFile: THandle; var lpFileSize: Int64): Boolean; stdcall;
   external kernel32 name 'GetFileSizeEx';
 {$IFEND}
+{$ENDIF}
 
 procedure SwapInts(var X, Y: Integer);
 var
@@ -669,7 +688,8 @@ end;
 
 procedure RaiseLastPdfError;
 begin
-  case FPDF_GetLastError of
+  case {$IFDEF FPC} longword(FPDF_GetLastError)
+       {$ELSE}FPDF_GetLastError{$ENDIF} of
     FPDF_ERR_SUCCESS:
       raise EPdfException.CreateRes(@RsPdfErrorSuccess);
     FPDF_ERR_FILE:
@@ -982,7 +1002,7 @@ begin
         UnmapViewOfFile(FBuffer);
         FBuffer := nil;
       end;
-      CloseHandle(FFileMapping);
+      FileClose(FFileMapping); { *Converted from CloseHandle* }
       FFileMapping := 0;
     end
     else if FBuffer <> nil then
@@ -994,7 +1014,7 @@ begin
 
     if FFileHandle <> INVALID_HANDLE_VALUE then
     begin
-      CloseHandle(FFileHandle);
+      FileClose(FFileHandle); { *Converted from CloseHandle* }
       FFileHandle := INVALID_HANDLE_VALUE;
     end;
 
@@ -1070,7 +1090,7 @@ begin
                 Inc(Offset, NumRead);
               end;
             finally
-              CloseHandle(FFileHandle);
+              FileClose(FFileHandle); { *Converted from CloseHandle* }
               FFileHandle := INVALID_HANDLE_VALUE;
             end;
 
@@ -1505,6 +1525,31 @@ begin
     SetLength(Bytes, Size);
 end;
 
+{$IFDEF FPC}
+procedure TPdfDocument.Pg2BMP(idx: integer; bmp: TBitMap);
+var  pg: FPDF_PAGE; dib: FPDF_BITMAP;  bmpData: Pointer;
+     ww, hh, bmpStride, yy: Integer;
+begin
+  pg := FPDF_LoadPage(FDocument, idx);
+  ww := Trunc(FPDF_GetPageWidth(pg));
+  hh := Trunc(FPDF_GetPageHeight(pg));
+  dib := FPDFBitmap_Create(ww, hh, 1);
+  FPDFBitmap_FillRect(dib, 0, 0, ww, hh, $FFFFFFFF);
+  FPDF_RenderPageBitmap(dib, pg, 0, 0, ww, hh, 0, 0);  //, FPDF_REVERSE_BYTE_ORDER);
+  bmpData := FPDFBitmap_GetBuffer(dib);
+  bmp.SetSize(ww, hh);
+  bmpStride := FPDFBitmap_GetStride(dib);
+  if bmpStride / ww =3 then
+    bmp.PixelFormat := pf24bit
+  else
+    bmp.PixelFormat := pf32bit;
+  for yy := 0 to hh - 1 do
+    Move(Pointer(PtrUInt(bmpData) + PtrUInt(yy * bmpStride))^,
+              bmp.ScanLine[yy]^, bmpStride);
+  pg := nil;
+end;
+{$ENDIF}
+
 function TPdfDocument.NewDocument: Boolean;
 begin
   Close;
@@ -1672,6 +1717,32 @@ begin
   end;
   Result := nil;
 end;
+                              {
+procedure TPdfDocument.Pg2BMP(idx: integer; bmp: TBitMap);
+var  dib: FPDF_BITMAP;  bmpData: Pointer;
+     ww, hh, bmpStride, yy: Integer;
+     pg: FPDF_PAGE;
+begin
+  pg := FPDF_LoadPage(FDocument, idx);
+  ww := Trunc(FPDF_GetPageWidth(pg));
+  hh := Trunc(FPDF_GetPageHeight(pg));
+//  ww := Trunc(Self.FWidth);
+//  hh := Trunc(Self.Height);
+  dib := FPDFBitmap_Create(ww, hh, 1);
+  FPDFBitmap_FillRect(dib, 0, 0, ww, hh, $FFFFFFFF);
+  FPDF_RenderPageBitmap(dib, pg, 0, 0, ww, hh, 0, 0);  //, FPDF_REVERSE_BYTE_ORDER);
+  bmpData := FPDFBitmap_GetBuffer(dib);
+  bmp.SetSize(ww, hh);
+  bmpStride := FPDFBitmap_GetStride(dib);
+  if bmpStride / ww =3 then
+    bmp.PixelFormat := pf24bit
+  else
+    bmp.PixelFormat := pf32bit;
+  for yy := 0 to hh - 1 do
+    Move(Pointer(PtrUInt(bmpData) + PtrUInt(yy * bmpStride))^,
+              bm.ScanLine[yy]^, bmpStride);
+end;
+                             }
 
 { TPdfPage }
 
@@ -1926,6 +1997,7 @@ begin
     FPDFPage_Flatten(FPage, Flags[AFlatPrint]);
 end;
 
+
 function TPdfPage.BeginText: Boolean;
 begin
   if FTextHandle = nil then
@@ -1945,7 +2017,7 @@ end;
 
 function TPdfPage.BeginFind(const SearchString: string; MatchCase, MatchWholeWord,
   FromEnd: Boolean): Boolean;
-var
+var {$IFDEF FPC}pwc: PWideChar; {$ENDIF}
   Flags, StartIndex: Integer;
 begin
   EndFind;
@@ -1956,13 +2028,22 @@ begin
       Flags := Flags or FPDF_MATCHCASE;
     if MatchWholeWord then
       Flags := Flags or FPDF_MATCHWHOLEWORD;
-
     if FromEnd then
       StartIndex := -1
     else
       StartIndex := 0;
-
+{$IFDEF FPC}
+    GetMem(pwc, (Length(SearchString)+1)*Sizeof(WideChar));
+    try
+      StrPCopy(pwc, SearchString);
+      FSearchHandle := FPDFText_FindStart(FTextHandle,
+                       pwc, Flags, StartIndex);
+    finally
+      Freemem(pwc);
+    end;
+{$ELSE}
     FSearchHandle := FPDFText_FindStart(FTextHandle, PChar(SearchString), Flags, StartIndex);
+{$ENDIF}
   end;
   Result := FSearchHandle <> nil;
 end;
@@ -2050,19 +2131,32 @@ begin
     Result := 0;
 end;
 
-function TPdfPage.ReadText(CharIndex, Count: Integer): string;
+function TPdfPage.ReadText(CharIndex, Count: Integer): string;// {$IFDEF FPC}WideString{$ELSE}string{$ENDIF};
 var
-  Len: Integer;
+  Len: Integer; {$IFDEF FPC}pwc: PWideChar;{$ENDIF}
 begin
   if (Count > 0) and BeginText then
-  begin
-    SetLength(Result, Count); // we let GetText overwrite our #0 terminator with its #0
-    Len := FPDFText_GetText(FTextHandle, CharIndex, Count, PChar(Result)) - 1; // returned length includes the #0
-    if Len <= 0 then
-      Result := ''
-    else if Len < Count then
-      SetLength(Result, Len);
-  end
+    begin
+{$IFDEF FPC}
+      Getmem(pwc, (Count+1)*Sizeof(WideChar));
+      try
+        Len := FPDFText_GetText(FTextHandle, CharIndex, Count, pwc) - 1; // returned length includes the #0
+        if Len <= 0 then
+          Result := ''
+        else
+          result := UnicodeString(pwc); //WideCharToString(pwc);
+      finally
+        Freemem(pwc)
+      end
+{$ELSE}
+      SetLength(Result, Count); // we let GetText overwrite our #0 terminator with its #0
+      Len := FPDFText_GetText(FTextHandle, CharIndex, Count, PChar(Result)) - 1; // returned length includes the #0
+      if Len <= 0 then
+        Result := ''
+      else if Len < Count then
+        SetLength(Result, Len);
+{$ENDIF}
+    end
   else
     Result := '';
 end;
@@ -2076,7 +2170,8 @@ begin
     Len := FPDFText_GetBoundedText(FTextHandle, Left, Top, Right, Bottom, nil, 0); // excluding #0 terminator
     SetLength(Result, Len);
     if Len > 0 then
-      FPDFText_GetBoundedText(FTextHandle, Left, Top, Right, Bottom, PChar(Result), Len);
+      FPDFText_GetBoundedText(FTextHandle, Left, Top, Right, Bottom,
+           {$IFDEF FPC}PWideChar{$ELSE}PChar{$ENDIF}(Result), Len);
   end
   else
     Result := '';
@@ -2117,7 +2212,7 @@ end;
 
 function TPdfPage.GetWebLinkURL(LinkIndex: Integer): string;
 var
-  Len: Integer;
+  Len: Integer;  {$IFDEF FPC} pwc: PWideChar; {$ENDIF}
 begin
   Result := '';
   if BeginWebLinks then
@@ -2125,8 +2220,18 @@ begin
     Len := FPDFLink_GetURL(FLinkHandle, LinkIndex, nil, 0) - 1; // including #0 terminator
     if Len > 0 then
     begin
+{$IFDEF FPC}
+      Getmem(pwc, (len + 1) * SizeOf(WideChar));
+      try
+        FPDFLink_GetURL(FLinkHandle, LinkIndex, pwc, Len + 1); // including #0 terminator
+        Result := WideCharToString(PWC); //WideCharToString(pwc);
+      finally
+        Freemem(pwc);
+      end;
+{$ELSE}
       SetLength(Result, Len);
-      FPDFLink_GetURL(FLinkHandle, LinkIndex, PChar(Result), Len + 1); // including #0 terminator
+      FPDFLink_GetURL(FLinkHandle, LinkIndex, (Result), Len + 1); // including #0 terminator
+{$ENDIF}
     end;
   end;
 end;
@@ -2527,7 +2632,7 @@ end;
 
 function TPdfAttachment.GetName: string;
 var
-  ByteLen: LongWord;
+  ByteLen: LongWord; {$IFDEF FPC} pwc: PWideChar; {$ENDIF}
 begin
   CheckValid;
   ByteLen := FPDFAttachment_GetName(Handle, nil, 0); // UTF 16 including #0 terminator in byte size
@@ -2535,8 +2640,18 @@ begin
     Result := ''
   else
   begin
+{$IFDEF FPC}
+    GetMem(pwc, ByteLen); // div SizeOf(WideChar) - 1);
+    try
+      FPDFAttachment_GetName(FHandle, pwc, ByteLen);
+      result := StrPas(pwc);
+    finally
+      Freemem(pwc);
+    end;
+{$ELSE}
     SetLength(Result, ByteLen div SizeOf(WideChar) - 1);
     FPDFAttachment_GetName(FHandle, PWideChar(Result), ByteLen);
+{$ENDIF}
   end;
 end;
 
@@ -2777,7 +2892,8 @@ begin
       FPDFAttachment_GetFile(FHandle, Buf, Size, OutBufLen);
       SetLength(Value, TEncodingAccess(Encoding).GetMemCharCount(Buf, Size));
       if Value <> '' then
-        TEncodingAccess(Encoding).GetMemChars(Buf, Size, PWideChar(Value), Length(Value));
+        TEncodingAccess(Encoding).GetMemChars(Buf, Size,
+          {$IFDEF FPC}PChar{$ELSE}PWideChar{$ENDIF}(Value), Length(Value));
     finally
       FreeMem(Buf);
     end;
@@ -3038,7 +3154,32 @@ initialization
   InitializeCriticalSectionAndSpinCount(FFITimersCritSect, 4000);
 
 finalization
+  //{$IFDEF FPC}Windows.{$ENDIF}
   DeleteCriticalSection(FFITimersCritSect);
+  //{$IFDEF FPC}Windows.{$ENDIF}
   DeleteCriticalSection(PDFiumInitCritSect);
 
 end.
+
+(*
+procedure TPdfPage.ToBMP(bmp: TBitmap);
+var  dib: FPDF_BITMAP;  bmpData: Pointer;
+     ww, hh, bmpStride, yy: Integer;
+begin
+  ww := Trunc(Self.FWidth);
+  hh := Trunc(Self.Height);
+  dib := FPDFBitmap_Create(ww, hh, 1);
+  FPDFBitmap_FillRect(dib, 0, 0, ww, hh, $FFFFFFFF);
+  FPDF_RenderPageBitmap(dib, Self.FPage, 0, 0, ww, hh, 0, 0);  //, FPDF_REVERSE_BYTE_ORDER);
+  bmpData := FPDFBitmap_GetBuffer(dib);
+  bmp.SetSize(ww, hh);
+  bmpStride := FPDFBitmap_GetStride(dib);
+  if bmpStride / ww =3 then
+    bmp.PixelFormat := pf24bit
+  else
+    bmp.PixelFormat := pf32bit;
+  for yy := 0 to hh - 1 do
+    Move(Pointer(PtrUInt(bmpData) + PtrUInt(yy * bmpStride))^,
+              bmp.ScanLine[yy]^, bmpStride);
+end;
+*)
