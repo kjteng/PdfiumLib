@@ -1,4 +1,4 @@
-# PdfiumLib
+# PdfiumLib (freepascal port)
 Example of a PDF VCL Control using PDFium
 
 ## Requirements
