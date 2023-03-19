@@ -9,12 +9,12 @@ Binary release: [chromium/5052](https://github.com/bblanchon/pdfium-binaries/rel
 This is a FreePascal port for PdfiumLib (Updated to chromium/5052) from                                https://github.com/ahausladen/PdfiumLib
 I have compiled it with Lazarus(ver2.2.2)/Freepascal(version 3.2.2). 
 
-The library/components works on some of my personal project (mainly to render pdf file). However, I am yet to test the methods relating to (i) pdf attachment; and (ii) pdf form.
+The library/components works on some of my personal project (mainly to render pdf file).
 
 All the amendments/changes for the freepascal port are kept within {$ifdef FPC} ...{$endif} block. 
 Another directive {$ifndef FPC} ...{$endif} is used to exclude parts of orignal codes that are not applicable for free pascal. This way the original source shall be intact if the we comment out the line containing {$DEFINE FPC}.
 
-A new method Pg2BMP(idx: integer; bmp: TBitMap) has been added. the purpose of this method is to convert a specific page of the pdf to bitmap.
+A new method PgToPNG(idx: integer; png: TPortableNetworkGraphic) has been added. the purpose of this method is to convert a specific page of the pdf to bitmap.
 
 Please ensure that Printer4Lazarus package is added to you project as it is REQUIRED for the components. Also, the component will not work with pdfium.dll dated on or before 2/3/2017 due to changes in the names of certain export functions. 
 
