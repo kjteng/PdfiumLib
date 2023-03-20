@@ -139,8 +139,11 @@ begin
 end;
 
 procedure TForm1.mnu5SaveClick(Sender: TObject);
+var fn: string;
 begin
-  pdf1.Document.SaveToFile('tmp.pdf');
+  fn := ChangeFileext(od1.Filename, 'X.pdf');
+  pdf1.Document.SaveToFile(fn);
+  Showmessage('File saves as ' + #13#10 +fn);
 end;
 
 
