@@ -33,7 +33,7 @@ object Form1: TForm1
       end
     end
     object mnu2: TMenuItem
-      Caption = 'For_Methods'
+      Caption = 'Form_Methods'
       object mnu21FocusedText: TMenuItem
         Caption = 'Focused Text'
         OnClick = mnu21FocusedTextClick
