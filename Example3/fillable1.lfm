@@ -1,0 +1,99 @@
+object Form1: TForm1
+  Left = 343
+  Height = 439
+  Top = 186
+  Width = 657
+  Caption = 'Test Fillable PDF Form'
+  ClientHeight = 419
+  ClientWidth = 657
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  LCLVersion = '2.2.2.0'
+  object Memo1: TMemo
+    Left = 429
+    Height = 419
+    Top = 0
+    Width = 228
+    Align = alRight
+    Color = clBtnFace
+    TabOrder = 0
+  end
+  object MainMenu1: TMainMenu
+    Left = 120
+    Top = 32
+    object mnu1: TMenuItem
+      Caption = '&File'
+      object mnu11Open: TMenuItem
+        Caption = '&Open PDF'
+        OnClick = mnu11OpenClick
+      end
+      object mnu12Save: TMenuItem
+        Caption = 'Save PDF'
+        OnClick = mnu12SaveClick
+      end
+    end
+    object mnu2: TMenuItem
+      Caption = 'For_Methods'
+      object mnu21FocusedText: TMenuItem
+        Caption = 'Focused Text'
+        OnClick = mnu21FocusedTextClick
+      end
+      object mnu22SelectedText: TMenuItem
+        Caption = 'Selected Text'
+        OnClick = mnu22SelectedTextClick
+      end
+      object mnu23ReplaceText: TMenuItem
+        Caption = 'Replace Selected Text'
+        OnClick = mnu23ReplaceTextClick
+      end
+      object mnu24Undo: TMenuItem
+        Caption = 'Undo'
+        OnClick = mnu24UndoClick
+      end
+      object mnu25Redo: TMenuItem
+        Caption = 'Redo'
+        OnClick = mnu25RedoClick
+      end
+    end
+    object mnu3: TMenuItem
+      Caption = 'Zoom'
+      object mnu31Enlarge: TMenuItem
+        Action = act1Plus
+        Caption = 'Enlarge'
+      end
+      object MenuItem1: TMenuItem
+        Action = act2Minus
+        Caption = 'Shrink'
+      end
+      object MenuItem2: TMenuItem
+        Action = act3Fit
+        Caption = 'AutoFit'
+      end
+    end
+  end
+  object od1: TOpenDialog
+    Filter = 'Pdf file (*.pdf)|*.pdf'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    Left = 56
+    Top = 32
+  end
+  object ActionList1: TActionList
+    Left = 424
+    Top = 96
+    object act1Plus: TAction
+      Caption = 'act1Plus'
+      OnExecute = act1PlusExecute
+      ShortCut = 16605
+    end
+    object act2Minus: TAction
+      Caption = 'act2Minus'
+      OnExecute = act2MinusExecute
+      ShortCut = 16603
+    end
+    object act3Fit: TAction
+      Caption = 'act3Fit'
+      OnExecute = act3FitExecute
+      ShortCut = 16571
+    end
+  end
+end
