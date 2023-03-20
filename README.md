@@ -20,6 +20,6 @@ Please ensure that Printer4Lazarus package is added to you project as it is REQU
 
 A pdflib.dpk file (and also Tpdfcontrol.lrs) is also included for those who wish to place the TPdfControl to the component palette in Lazarus. Before installing the dpk, please remember to uncomment the line containing {$DEFINE VCL_PALETTE} in pdfiumctrl.pas. You may also need to delete the files in project\lib\ folder to ensure a clean start.
 
-The example file (PdfiumLibExample) is also originated from Andreas Hausladen's site, with some minor modification for Lazarus.
+The Example 1 (PdfiumLibExample) is also originated from Andreas Hausladen's site, with some minor modification for Lazarus.
 
 All the codes are distributed/released under MPL-2.0 license.	
