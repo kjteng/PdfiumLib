@@ -1,0 +1,2 @@
+32 bits application requires a copy the 32bit version of pdfium.dll in this folder
+
