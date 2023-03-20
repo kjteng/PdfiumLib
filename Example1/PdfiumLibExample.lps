@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="PdfiumLibExample.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="25"/>
+        <UsageCount Value="56"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="MainFrm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="187"/>
+        <CursorPos X="25" Y="192"/>
+        <UsageCount Value="56"/>
+        <Bookmarks Count="2">
+          <Item0 Y="210" ID="1"/>
+          <Item1 Y="121" ID="2"/>
+        </Bookmarks>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unit1.pas"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="25" Y="7"/>
+        <UsageCount Value="17"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\pdfium\PdfiumCtrl.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="45" Y="4"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="PdfiumCore.pas"/>
+        <UnitName Value="pdfiumcore"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2873"/>
+        <CursorPos X="21" Y="2892"/>
+        <UsageCount Value="26"/>
+      </Unit>
+      <Unit>
+        <Filename Value="PdfiumLib.pas"/>
+        <UnitName Value="pdfiumlib"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="26"/>
+      </Unit>
+      <Unit>
+        <Filename Value="pdfiumctrl.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="23" Y="25"/>
+        <UsageCount Value="26"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\ahausladenPdfiumLib\ori\PdfiumCore.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1956"/>
+        <CursorPos X="94" Y="1967"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\ahausladenPdfiumLib\ori\PdfiumCtrl.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\ahausladenPdfiumLib\ori\PdfiumLib.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="8328"/>
+        <CursorPos X="21" Y="8328"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2951"/>
+        <CursorPos Y="2961"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\buttoncontrol.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="47"/>
+        <CursorPos Y="56"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\buttons.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="162"/>
+        <CursorPos Y="170"/>
+        <UsageCount Value="12"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="26">
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="128" Column="87" TopLine="111"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="118" Column="53" TopLine="113"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="219" Column="15" TopLine="201"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="108" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="222" Column="4" TopLine="201"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="119" Column="9" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="123" Column="43" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="223" Column="4" TopLine="202"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="128" Column="6" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="219" Column="5" TopLine="203"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="224" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="219" Column="5" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="104" Column="43" TopLine="104"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="224" TopLine="194"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="209" Column="16" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="113" TopLine="104"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="214" TopLine="193"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="213" TopLine="192"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="203" Column="7" TopLine="192"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="213" TopLine="192"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="114" Column="43" TopLine="110"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="113" Column="3" TopLine="101"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="93" Column="8" TopLine="80"/>
+      </Position>
+      <Position>
+        <Filename Value="MainFrm.pas"/>
+        <Caret Line="116" Column="22" TopLine="98"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
