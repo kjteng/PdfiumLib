@@ -1,1 +1,1 @@
-To include the 64bit version of pdfium.dll in this folder
+64 bits application requires a copy the 64cbits version of pdfium.dll in this folder
