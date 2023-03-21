@@ -1,0 +1,135 @@
+object Form1: TForm1
+  Left = 343
+  Height = 439
+  Top = 186
+  Width = 657
+  Caption = 'Test: Text Data and Weblink in pdf'
+  ClientHeight = 419
+  ClientWidth = 657
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  LCLVersion = '2.2.2.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 34
+    Top = 0
+    Width = 657
+    Align = alTop
+    ClientHeight = 34
+    ClientWidth = 657
+    TabOrder = 0
+    object Edit1: TEdit
+      Left = 265
+      Height = 23
+      Top = 6
+      Width = 137
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 161
+      Height = 15
+      Top = 8
+      Width = 86
+      Caption = 'Text to highlight'
+      ParentColor = False
+    end
+    object BitBtn1: TBitBtn
+      Left = 401
+      Height = 25
+      Hint = 'Highlight specified text'
+      Top = 6
+      Width = 25
+      Kind = bkOK
+      ModalResult = 1
+      OnClick = BitBtn1Click
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object BitBtn2: TBitBtn
+      Left = 429
+      Height = 25
+      Hint = 'Clear text highlight'
+      Top = 6
+      Width = 25
+      Cancel = True
+      Kind = bkCancel
+      ModalResult = 2
+      OnClick = BitBtn2Click
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 128
+    Top = 104
+    object mnu1: TMenuItem
+      Caption = '&File'
+      object mnu11Open: TMenuItem
+        Caption = '&Open PDF'
+        OnClick = mnu11OpenClick
+      end
+      object mnu12Close: TMenuItem
+        Caption = 'Close'
+        OnClick = mnu12CloseClick
+      end
+    end
+    object mnu2: TMenuItem
+      Caption = 'Text Data'
+      Enabled = False
+      object mnu21GetTextAt: TMenuItem
+        Caption = 'GetTextAt'
+        OnClick = mnu21GetTextAtClick
+      end
+      object mnu22ReadText: TMenuItem
+        Caption = 'Read Text'
+        OnClick = mnu22ReadTextClick
+      end
+      object mnu23Weblink: TMenuItem
+        Caption = 'WebLink'
+        OnClick = mnu23WeblinkClick
+      end
+    end
+    object mnu3: TMenuItem
+      Caption = 'Zoom'
+      object mnu31Enlarge: TMenuItem
+        Action = act1Plus
+        Caption = 'Enlarge'
+      end
+      object MenuItem1: TMenuItem
+        Action = act2Minus
+        Caption = 'Shrink'
+      end
+      object MenuItem2: TMenuItem
+        Action = act3Fit
+        Caption = 'AutoFit'
+      end
+    end
+  end
+  object od1: TOpenDialog
+    Filter = 'Pdf file (*.pdf)|*.pdf'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    Left = 56
+    Top = 72
+  end
+  object ActionList1: TActionList
+    Left = 336
+    Top = 64
+    object act1Plus: TAction
+      Caption = 'act1Plus'
+      OnExecute = act1PlusExecute
+      ShortCut = 16605
+    end
+    object act2Minus: TAction
+      Caption = 'act2Minus'
+      OnExecute = act2MinusExecute
+      ShortCut = 16603
+    end
+    object act3Fit: TAction
+      Caption = 'act3Fit'
+      OnExecute = act3FitExecute
+      ShortCut = 16571
+    end
+  end
+end
