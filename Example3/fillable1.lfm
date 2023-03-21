@@ -4,20 +4,9 @@ object Form1: TForm1
   Top = 186
   Width = 657
   Caption = 'Test Fillable PDF Form'
-  ClientHeight = 419
-  ClientWidth = 657
   Menu = MainMenu1
   OnCreate = FormCreate
   LCLVersion = '2.2.2.0'
-  object Memo1: TMemo
-    Left = 429
-    Height = 419
-    Top = 0
-    Width = 228
-    Align = alRight
-    Color = clBtnFace
-    TabOrder = 0
-  end
   object MainMenu1: TMainMenu
     Left = 120
     Top = 32
@@ -31,9 +20,14 @@ object Form1: TForm1
         Caption = 'Save PDF'
         OnClick = mnu12SaveClick
       end
+      object mnu13Close: TMenuItem
+        Caption = 'Close PDF'
+        OnClick = mnu13CloseClick
+      end
     end
     object mnu2: TMenuItem
       Caption = 'Form_Methods'
+      Enabled = False
       object mnu21FocusedText: TMenuItem
         Caption = 'Focused Text'
         OnClick = mnu21FocusedTextClick

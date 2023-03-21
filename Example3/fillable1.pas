@@ -17,9 +17,9 @@ type
     act3Fit: TAction;
     ActionList1: TActionList;
     MainMenu1: TMainMenu;
-    Memo1: TMemo;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnu13Close: TMenuItem;
     mnu31Enlarge: TMenuItem;
     mnu3: TMenuItem;
     mnu25Redo: TMenuItem;
@@ -36,6 +36,7 @@ type
     procedure act2MinusExecute(Sender: TObject);
     procedure act3FitExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure mnu13CloseClick(Sender: TObject);
     procedure mnu11OpenClick(Sender: TObject);
     procedure mnu12SaveClick(Sender: TObject);
     procedure mnu21FocusedTextClick(Sender: TObject);
@@ -70,6 +71,12 @@ begin
 
 end;
 
+procedure TForm1.mnu13CloseClick(Sender: TObject);
+begin
+  pdf1.Close;
+  mnu2.Enabled := False;
+end;
+
 procedure TForm1.act1PlusExecute(Sender: TObject);
 begin
   pdf1.ScaleMode := smZoom;
@@ -93,41 +100,39 @@ procedure TForm1.mnu11OpenClick(Sender: TObject);
 begin
   od1.Filter:= 'Pdf file (*.pdf)|*.pdf';
   if od1.Execute then
-    pdf1.LoadFromFile(od1.FileName);
+    try
+      pdf1.LoadFromFile(od1.FileName);
+    finally
+      mnu2.Enabled := pdf1.Document.Active;
+    end;
 end;
 
 procedure TForm1.mnu12SaveClick(Sender: TObject);
 begin
-  if pdf1.Document.Active then
-    pdf1.Document.SaveToFile('tmp.pdf');
+  pdf1.Document.SaveToFile('tmp.pdf');
 end;
 
 procedure TForm1.mnu21FocusedTextClick(Sender: TObject);
 begin
-  if pdf1.Document.Active then
-    memo1.lines.Add(#13#10'FormGetFocusedText >>'+#13#10
+  Showmessage('FormGetFocusedText :-'+#13#10
                    +pdf1.CurrentPage.FormGetFocusedText);
 end;
 
 procedure TForm1.mnu22SelectedTextClick(Sender: TObject);
 begin
-  if pdf1.Document.Active then
-    memo1.lines.Add(#13#10'FormGetSelectedText >>'+#13#10
-                   +pdf1.CurrentPage.FormGetSelectedText);
+  Showmessage('FormGetSelectedText :-'+#13#10
+              +pdf1.CurrentPage.FormGetSelectedText);
 end;
 
 procedure TForm1.mnu23ReplaceTextClick(Sender: TObject);
 begin
-  if pdf1.Document.Active then
-    begin
-      pdf1.CurrentPage.FormSelectAllText;
-      pdf1.CurrentPage.FormReplaceSelection('New Text');
-    end;
+  pdf1.CurrentPage.FormSelectAllText;
+  pdf1.CurrentPage.FormReplaceSelection('New Text');
 end;
 
 procedure TForm1.mnu24UndoClick(Sender: TObject);
 begin
-  if pdf1.Document.Active and pdf1.CurrentPage.FormCanUndo then
+  if pdf1.CurrentPage.FormCanUndo then
     pdf1.CurrentPage.FormUndo
   else
     Showmessage('Undo is not applicable now');
@@ -135,7 +140,7 @@ end;
 
 procedure TForm1.mnu25RedoClick(Sender: TObject);
 begin
-  if pdf1.Document.Active and pdf1.CurrentPage.FormRedo then
+  if pdf1.CurrentPage.FormRedo then
     pdf1.CurrentPage.FormRedo
   else
     Showmessage('Redo is not applicable now');
