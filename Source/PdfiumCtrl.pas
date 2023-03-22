@@ -20,7 +20,7 @@ unit pdfiumctrl;
 interface
 
 uses
-  {$IFDEF FPC}LResources, PrintersDlgs, {LMessages, } LCLIntf, LCLType,{$ENDIF}
+  {$IFDEF FPC}LResources, PrintersDlgs,  LCLIntf, LCLType,{$ENDIF}
    Windows, Messages,
    Types, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, PdfiumCore;
 
@@ -1487,7 +1487,6 @@ end;
 
 function TPdfControl.GetTextInRect(const R: TRect): string;
 begin
-  showmessage('get');
   if IsPageValid then
     Result := CurrentPage.GetTextAt(DeviceToPage(R))
   else

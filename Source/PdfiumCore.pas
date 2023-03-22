@@ -1,4 +1,4 @@
-{ 2023-03-20
+{ 2023-03-22
   FreePascal port for ahausladen/PdfiumLib (Updated to chromium/5052)
                                  https://github.com/ahausladen/PdfiumLib
   Tested with: Lazarus(ver2.2.2)/Freepascal(version 3.2.2)
@@ -15,7 +15,7 @@ unit pdfiumcore;
 
 interface
 
-uses   Dialogs,
+uses   Dialogs,   FPImage, FPReadPNG, FPWritePNG,
 {$IFDEF FPC} LCLIntf, LCLType,  {$ELSE}  WinSpool,{$ENDIF}
   Windows, Types, SysUtils, Classes, Contnrs, PdfiumLib, Graphics;
 const
@@ -579,7 +579,7 @@ end;
 function TEncodingAccess.GetMemChars(Bytes: PByte; ByteCount: Integer; Chars: PChar; CharCount: Integer): Integer;
 begin
 {$IFDEF FPC}
-  Result := GetChars(Bytes, ByteCount, PUnicodeChar(PWideChar(chars)), CharCount);//PWideChar(UTF8Decode(Chars)), CharCount);
+  Result := GetChars(Bytes, ByteCount, PUnicodeChar(PWideChar(chars)), CharCount);
 {$ELSE}
   Result := GetChars(Bytes, ByteCount, Chars, CharCount);
 {$ENDIF}
@@ -1599,6 +1599,7 @@ begin
     Move(Pointer(PtrUInt(bmpData) + PtrUInt(yy * bmpStride))^,
               png.ScanLine[yy]^, bmpStride);
   pg := nil;
+
 end;
 
 {$ENDIF}
@@ -2736,7 +2737,12 @@ function TPdfAttachmentList.Add(const Name: string): TPdfAttachment;
 begin
   FDocument.CheckActive;
   Result.FDocument := FDocument;
+{$IFDEF FPC}
+  Result.FHandle := FPDFDoc_AddAttachment(FDocument.Handle, PWideChar(utf8decode(Name)));
+{$ELSE}
   Result.FHandle := FPDFDoc_AddAttachment(FDocument.Handle, PWideChar(Name));
+
+{$ENDIF}
   if Result.FHandle = nil then
     raise EPdfException.CreateResFmt(@RsPdfCannotAddAttachmnent, [Name]);
 end;
