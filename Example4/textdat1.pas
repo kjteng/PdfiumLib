@@ -12,17 +12,16 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    act1Plus: TAction;
-    act2Minus: TAction;
-    act3Fit: TAction;
-    ActionList1: TActionList;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     Edit1: TEdit;
     Label1: TLabel;
     MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
+    mnu19: TMenuItem;
+    mnu32Shrink: TMenuItem;
+    mnu33Fit: TMenuItem;
+    mnu25Prev: TMenuItem;
+    mnu26Next: TMenuItem;
     mnu31Enlarge: TMenuItem;
     mnu3: TMenuItem;
     mnu23Weblink: TMenuItem;
@@ -34,17 +33,22 @@ type
     mnu12Close: TMenuItem;
     od1: TOpenDialog;
     Panel1: TPanel;
-    procedure act1PlusExecute(Sender: TObject);
-    procedure act2MinusExecute(Sender: TObject);
-    procedure act3FitExecute(Sender: TObject);
+    Separator1: TMenuItem;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure mnu19Click(Sender: TObject);
+    procedure mnu32ShrinkClick(Sender: TObject);
+    procedure mnu33FitClick(Sender: TObject);
+    procedure mnu25PrevClick(Sender: TObject);
     procedure mnu11OpenClick(Sender: TObject);
     procedure mnu12CloseClick(Sender: TObject);
     procedure mnu21GetTextAtClick(Sender: TObject);
     procedure mnu22ReadTextClick(Sender: TObject);
     procedure mnu23WeblinkClick(Sender: TObject);
+    procedure mnu26NextClick(Sender: TObject);
+    procedure mnu31EnlargeClick(Sender: TObject);
   private
     procedure WebLinkClick(Sender: TObject; Url: string);
   public
@@ -69,29 +73,32 @@ begin
   pdf1.OnWebLinkClick := @WebLinkClick;
 end;
 
-procedure TForm1.WebLinkClick(Sender: TObject; Url: string);
+procedure TForm1.mnu19Click(Sender: TObject);
 begin
-  if Messagedlg('Open ' + url+'?', mtConfirmation, mbYesNo, 0) = mrYes then
-    OpenURL(url);
+  Close
 end;
 
-procedure TForm1.act1PlusExecute(Sender: TObject);
-begin
-  pdf1.ScaleMode := smZoom;
-  if pdf1.ZoomPercentage < 200 then
-    pdf1.ZoomPercentage := pdf1.ZoomPercentage +3;
-end;
-
-procedure TForm1.act2MinusExecute(Sender: TObject);
+procedure TForm1.mnu32ShrinkClick(Sender: TObject);
 begin
   pdf1.ScaleMode := smZoom;
   if pdf1.ZoomPercentage > 50 then
     pdf1.ZoomPercentage := pdf1.ZoomPercentage -3;
 end;
 
-procedure TForm1.act3FitExecute(Sender: TObject);
+procedure TForm1.mnu33FitClick(Sender: TObject);
 begin
   pdf1.ScaleMode := smFitAuto;
+end;
+
+procedure TForm1.mnu25PrevClick(Sender: TObject);
+begin
+  pdf1.GotoPrevPage;
+end;
+
+procedure TForm1.WebLinkClick(Sender: TObject; Url: string);
+begin
+  if Messagedlg('Open ' + url+'?', mtConfirmation, mbYesNo, 0) = mrYes then
+    OpenURL(url);
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
@@ -103,6 +110,11 @@ end;
 procedure TForm1.BitBtn2Click(Sender: TObject);
 begin
   pdf1.ClearHighlightText;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  pdf1.Free
 end;
 
 procedure TForm1.mnu11OpenClick(Sender: TObject);
@@ -161,6 +173,18 @@ begin
         tx := tx+ ii.ToString +': ' +GetWebLinkURL(ii) +#13#10;
       Showmessage(tx);
     end;
+end;
+
+procedure TForm1.mnu26NextClick(Sender: TObject);
+begin
+  pdf1.GotoNextPage;
+end;
+
+procedure TForm1.mnu31EnlargeClick(Sender: TObject);
+begin
+  pdf1.ScaleMode := smZoom;
+  if pdf1.ZoomPercentage < 200 then
+    pdf1.ZoomPercentage := pdf1.ZoomPercentage +3;
 end;
 
 end.
