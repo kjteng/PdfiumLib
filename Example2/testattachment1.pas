@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,  lclintf,
-  PdfiumCtrl, PdfiumCore, Dialogs, ExtCtrls, StdCtrls, Buttons, Menus;
+  PdfiumCtrl, PdfiumCore, Dialogs, ExtCtrls, StdCtrls, Buttons, Menus, ActnList;
 
 type
 
@@ -18,21 +18,40 @@ type
     lbox1: TListBox;
     MainMenu1: TMainMenu;
     Memo1: TMemo;
-    mnu5Save: TMenuItem;
-    mnu4Detach: TMenuItem;
-    mnu1: TMenuItem;
-    mnu3Attach: TMenuItem;
+    mnu31Enlarge: TMenuItem;
+    mn33Fit: TMenuItem;
+    mnu32Shrink: TMenuItem;
+    mnu34Prev: TMenuItem;
+    mnu35Next: TMenuItem;
+    mnu3: TMenuItem;
     mnu2: TMenuItem;
+    mnu19Exit: TMenuItem;
+    mnu18Close: TMenuItem;
+    mnu21Attach: TMenuItem;
+    mnu22Del: TMenuItem;
+    mnu23: TMenuItem;
+    mnu12Save: TMenuItem;
+    mnu11Open: TMenuItem;
     mnu1OpenPdf: TMenuItem;
     od1: TOpenDialog;
-    procedure FormDestroy(Sender: TObject);
+    Separator1: TMenuItem;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
-    procedure lbox1Click(Sender: TObject);
-    procedure mnu1OpenPdfClick(Sender: TObject);
-    procedure mnu2Pg2ImgClick(Sender: TObject);
-    procedure mnu3AttachClick(Sender: TObject);
-    procedure mnu4DetachClick(Sender: TObject);
-    procedure mnu5SaveClick(Sender: TObject);
+    procedure lbox1SelectionChange(Sender: TObject; User: boolean);
+    procedure Memo1Enter(Sender: TObject);
+    procedure Memo1Exit(Sender: TObject);
+    procedure mn33FitClick(Sender: TObject);
+    procedure mnu11OpenClick(Sender: TObject);
+    procedure mnu23PgImgClick(Sender: TObject);
+    procedure mnu21AttachClick(Sender: TObject);
+    procedure mnu22DelClick(Sender: TObject);
+    procedure mnu12SaveClick(Sender: TObject);
+    procedure mnu18CloseClick(Sender: TObject);
+    procedure mnu19ExitClick(Sender: TObject);
+    procedure mnu31EnlargeClick(Sender: TObject);
+    procedure mnu34PrevClick(Sender: TObject);
+    procedure mnu35NextClick(Sender: TObject);
+    procedure mnu32ShrinkClick(Sender: TObject);
   private
   public
     procedure ListAttachments;
@@ -56,51 +75,94 @@ begin
   pdf1.Align := alClient;
   pdf1.Parent := Self;
   pdf1.Show;
+  pdf1.Hint := 'You have modified the attachment.'#13 +
+               'The modification will become permanent'#13+
+               ' if you save this pdf file. ';
 end;
 
-procedure TForm1.lbox1Click(Sender: TObject);
+
+procedure TForm1.lbox1SelectionChange(Sender: TObject; User: boolean);
 var att: TPdfAttachment;  tx: string;
 begin
   if lbox1.ItemIndex < 0 then Exit;
   Att := pdf1.Document.Attachments[lbox1.ItemIndex];
-  if att.Name.IndexOf('utf8') >-1 then  // filename NOT containing utf8, default to be utf8 encoding
-    att.GetContent(tx)
+  if (att.Name.IndexOf('utf16') >-1) or  (att.Name.IndexOf('unicode') >-1)then  // filename NOT containing utf8, default to be utf8 encoding
+    att.GetContent(tx, TEncoding.Unicode)
   else
-    att.GetContent(tx, TEncoding.Unicode);
+    att.GetContent(tx);
   Memo1.Lines.Text:= tx;
 end;
 
-procedure TForm1.ListAttachments;
-var ii: integer; att: TPdfAttachment;
+procedure TForm1.Memo1Enter(Sender: TObject);
 begin
-  lbox1.Clear;  memo1.Clear;
-  lbox1.Visible := pdf1.Document.Attachments.Count > 0;
-  GroupBox1.Visible := lbox1.Visible;
-  //    lbox1.Items.BeginUpdate;
+  memo1.modified := false;
+end;
+
+
+procedure TForm1.Memo1Exit(Sender: TObject);
+var ii: integer; att: TPdfAttachment; tx: string;
+begin
+  ii := lbox1.ItemIndex;
+  if (ii > -1) and memo1.Modified then
+    begin
+      Att := pdf1.Document.Attachments[ii];
+      tx := memo1.text;
+      if (att.Name.IndexOf('utf16') >-1) or  (att.Name.IndexOf('unicode') >-1)then  // filename NOT containing utf8, default to be utf8 encoding
+        att.SetContent(tx, TEncoding.Unicode)
+      else
+        att.SetContent(tx);
+      pdf1.ShowHint:= True;
+    end;
+end;
+
+procedure TForm1.mn33FitClick(Sender: TObject);
+begin
+  pdf1.ScaleMode := smFitAuto;
+end;
+
+
+procedure TForm1.ListAttachments;
+var ii, count: integer; att: TPdfAttachment;
+begin
+  lbox1.Clear;  memo1.Clear;  pdf1.ShowHint := False;
+  count := pdf1.Document.Attachments.Count;
   try
-  //      lbox1.Column[0].Width :=500;
-    for ii := 0 to pdf1.Document.Attachments.Count - 1 do
+    for ii := 0 to count - 1 do
       begin
         Att := pdf1.Document.Attachments[ii];
         lbox1.Items.Add( Format('%s (%d Bytes)', [Att.Name, Att.ContentSize]));
       end;
-    lbox1.ItemIndex := -1;
+    if count > 0 then
+      begin
+        GroupBox1.Caption := 'Number of attachment found:'+ count.ToString;
+        lbox1.ItemIndex := 0;
+      end
+    else
+      begin
+        GroupBox1.Caption := 'Attachment';
+        lbox1.ItemIndex := -1;
+      end;
   finally
   //      lbox1.Items.EndUpdate;
   end;
 end;
 
-procedure TForm1.mnu1OpenPdfClick(Sender: TObject);
+procedure TForm1.mnu11OpenClick(Sender: TObject);
 begin
   od1.Filter:= 'Pdf file (*.pdf)|*.pdf';
   if od1.Execute then
     begin
-      pdf1.LoadFromFile(od1.FileName);
-      ListAttachments;
+      try
+        pdf1.LoadFromFile(od1.FileName);
+        ListAttachments;
+        mnu2.Enabled := pdf1.Document.Active;
+      except
+        mnu18CloseClick(nil);
+      end;
     end;
 end;
 
-procedure TForm1.mnu2Pg2ImgClick(Sender: TObject);
+procedure TForm1.mnu23PgImgClick(Sender: TObject);
 var png: TPortableNetworkGraphic; fn: string;
 begin
   png := TPortableNetworkGraphic.Create;
@@ -115,20 +177,21 @@ begin
   end;
 end;
 
-procedure TForm1.mnu3AttachClick(Sender: TObject);
-var att: TPdfAttachment;
+procedure TForm1.mnu21AttachClick(Sender: TObject);
+var att: TPdfAttachment;  fn: string;
 begin
-  if not pdf1.Document.Active then exit;
   od1.Filter:= 'Text files (*.txt)|*.Txt|All files (*.*)|*.*';
   if od1.Execute then
     begin
-      att := pdf1.Document.Attachments.Add(ExtractFileName(od1.Filename));
+      fn := ExtractFilename(od1.Filename);
+      att := pdf1.Document.Attachments.Add(fn);
       att.LoadFromFile(od1.Filename);
       ListAttachments;
+      pdf1.ShowHint:= True;
     end;
 end;
 
-procedure TForm1.mnu4DetachClick(Sender: TObject);
+procedure TForm1.mnu22DelClick(Sender: TObject);
 var att: TPdfAttachment; ii: integer;
 begin
   ii := lbox1.ItemIndex;
@@ -136,22 +199,61 @@ begin
   att.SetContent('', nil);
   pdf1.Document.Attachments.Delete(ii);
   ListAttachments;
+  pdf1.ShowHint:= True;
 end;
 
-procedure TForm1.mnu5SaveClick(Sender: TObject);
-var fn: string;
+procedure TForm1.mnu12SaveClick(Sender: TObject);
+var fn: String;
 begin
-  fn := ChangeFileext(od1.Filename, 'X.pdf');
+  if not pdf1.Document.Active then Exit;
+  fn := ChangeFileExt(pdf1.Document.FileName, '~.pdf');
   pdf1.Document.SaveToFile(fn);
+  pdf1.ShowHint := False;
   Showmessage('File saves as ' + #13#10 +fn);
 end;
 
+procedure TForm1.mnu18CloseClick(Sender: TObject);
+begin
+//  Memo1.Clear; lbox1.Clear; GroupBox1.Caption := 'Attachment';
+  if not pdf1.Document.Active then Exit;
+  ListAttachments;
+  pdf1.Close;
+  mnu2.Enabled := False;
+end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.mnu19ExitClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TForm1.mnu31EnlargeClick(Sender: TObject);
+begin
+  pdf1.ScaleMode := smZoom;
+  if pdf1.ZoomPercentage < 200 then
+    pdf1.ZoomPercentage := pdf1.ZoomPercentage +3;
+end;
+
+procedure TForm1.mnu34PrevClick(Sender: TObject);
+begin
+  pdf1.GotoPrevPage;
+end;
+
+procedure TForm1.mnu35NextClick(Sender: TObject);
+begin
+   pdf1.GotoNextPage;
+end;
+
+procedure TForm1.mnu32ShrinkClick(Sender: TObject);
+begin
+  pdf1.ScaleMode := smZoom;
+  if pdf1.ZoomPercentage > 50 then
+    pdf1.ZoomPercentage := pdf1.ZoomPercentage -3;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   pdf1.Free;
 end;
-
 
 end.
 
