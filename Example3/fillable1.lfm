@@ -5,7 +5,9 @@ object Form1: TForm1
   Width = 657
   Caption = 'Test Fillable PDF Form'
   Menu = MainMenu1
+  OnClose = FormClose
   OnCreate = FormCreate
+  Position = poDesktopCenter
   LCLVersion = '2.2.2.0'
   object MainMenu1: TMainMenu
     Left = 120
@@ -23,6 +25,10 @@ object Form1: TForm1
       object mnu13Close: TMenuItem
         Caption = 'Close PDF'
         OnClick = mnu13CloseClick
+      end
+      object mnu14Exit: TMenuItem
+        Caption = 'Exit'
+        OnClick = mnu14ExitClick
       end
     end
     object mnu2: TMenuItem
@@ -50,18 +56,34 @@ object Form1: TForm1
       end
     end
     object mnu3: TMenuItem
-      Caption = 'Zoom'
+      Caption = 'Zoom/Navigate'
       object mnu31Enlarge: TMenuItem
-        Action = act1Plus
         Caption = 'Enlarge'
+        ShortCut = 16605
+        OnClick = mnu31EnlargeClick
       end
-      object MenuItem1: TMenuItem
-        Action = act2Minus
+      object mnu32Shrink: TMenuItem
         Caption = 'Shrink'
+        ShortCut = 16603
+        OnClick = mnu32ShrinkClick
       end
-      object MenuItem2: TMenuItem
-        Action = act3Fit
+      object mnu33Fit: TMenuItem
         Caption = 'AutoFit'
+        ShortCut = 16571
+        OnClick = mnu33FitClick
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object mnu34Prev: TMenuItem
+        Caption = 'Previous Page'
+        ShortCut = 16417
+        OnClick = mnu34PrevClick
+      end
+      object mnu35Next: TMenuItem
+        Caption = 'Next Page'
+        ShortCut = 16418
+        OnClick = mnu35NextClick
       end
     end
   end
@@ -70,24 +92,5 @@ object Form1: TForm1
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
     Left = 56
     Top = 32
-  end
-  object ActionList1: TActionList
-    Left = 424
-    Top = 96
-    object act1Plus: TAction
-      Caption = 'act1Plus'
-      OnExecute = act1PlusExecute
-      ShortCut = 16605
-    end
-    object act2Minus: TAction
-      Caption = 'act2Minus'
-      OnExecute = act2MinusExecute
-      ShortCut = 16603
-    end
-    object act3Fit: TAction
-      Caption = 'act3Fit'
-      OnExecute = act3FitExecute
-      ShortCut = 16571
-    end
   end
 end

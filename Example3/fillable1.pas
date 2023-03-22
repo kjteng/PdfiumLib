@@ -12,13 +12,12 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    act1Plus: TAction;
-    act2Minus: TAction;
-    act3Fit: TAction;
-    ActionList1: TActionList;
     MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
+    mnu32Shrink: TMenuItem;
+    mnu33Fit: TMenuItem;
+    mnu34Prev: TMenuItem;
+    mnu35Next: TMenuItem;
+    mnu14Exit: TMenuItem;
     mnu13Close: TMenuItem;
     mnu31Enlarge: TMenuItem;
     mnu3: TMenuItem;
@@ -32,18 +31,23 @@ type
     mnu1: TMenuItem;
     mnu12Save: TMenuItem;
     od1: TOpenDialog;
-    procedure act1PlusExecute(Sender: TObject);
-    procedure act2MinusExecute(Sender: TObject);
-    procedure act3FitExecute(Sender: TObject);
+    Separator1: TMenuItem;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure mnu31EnlargeClick(Sender: TObject);
+    procedure mnu32ShrinkClick(Sender: TObject);
+    procedure mnu33FitClick(Sender: TObject);
+    procedure mnu34PrevClick(Sender: TObject);
     procedure mnu13CloseClick(Sender: TObject);
     procedure mnu11OpenClick(Sender: TObject);
     procedure mnu12SaveClick(Sender: TObject);
+    procedure mnu14ExitClick(Sender: TObject);
     procedure mnu21FocusedTextClick(Sender: TObject);
     procedure mnu22SelectedTextClick(Sender: TObject);
     procedure mnu23ReplaceTextClick(Sender: TObject);
     procedure mnu24UndoClick(Sender: TObject);
     procedure mnu25RedoClick(Sender: TObject);
+    procedure mnu35NextClick(Sender: TObject);
   private
 
   public
@@ -71,29 +75,39 @@ begin
 
 end;
 
-procedure TForm1.mnu13CloseClick(Sender: TObject);
-begin
-  pdf1.Close;
-  mnu2.Enabled := False;
-end;
-
-procedure TForm1.act1PlusExecute(Sender: TObject);
+procedure TForm1.mnu31EnlargeClick(Sender: TObject);
 begin
   pdf1.ScaleMode := smZoom;
   if pdf1.ZoomPercentage < 200 then
     pdf1.ZoomPercentage := pdf1.ZoomPercentage +3;
 end;
 
-procedure TForm1.act2MinusExecute(Sender: TObject);
+procedure TForm1.mnu32ShrinkClick(Sender: TObject);
 begin
   pdf1.ScaleMode := smZoom;
   if pdf1.ZoomPercentage > 50 then
     pdf1.ZoomPercentage := pdf1.ZoomPercentage -3;
 end;
 
-procedure TForm1.act3FitExecute(Sender: TObject);
+procedure TForm1.mnu33FitClick(Sender: TObject);
 begin
   pdf1.ScaleMode := smFitAuto;
+end;
+
+procedure TForm1.mnu34PrevClick(Sender: TObject);
+begin
+  pdf1.GotoPrevPage;
+end;
+
+procedure TForm1.mnu13CloseClick(Sender: TObject);
+begin
+  pdf1.Close;
+  mnu2.Enabled := False;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  pdf1.Free
 end;
 
 procedure TForm1.mnu11OpenClick(Sender: TObject);
@@ -110,6 +124,11 @@ end;
 procedure TForm1.mnu12SaveClick(Sender: TObject);
 begin
   pdf1.Document.SaveToFile('tmp.pdf');
+end;
+
+procedure TForm1.mnu14ExitClick(Sender: TObject);
+begin
+  Close
 end;
 
 procedure TForm1.mnu21FocusedTextClick(Sender: TObject);
@@ -144,6 +163,11 @@ begin
     pdf1.CurrentPage.FormRedo
   else
     Showmessage('Redo is not applicable now');
+end;
+
+procedure TForm1.mnu35NextClick(Sender: TObject);
+begin
+  pdf1.GotoNextPage;
 end;
 
 end.
