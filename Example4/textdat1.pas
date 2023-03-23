@@ -17,7 +17,9 @@ type
     Edit1: TEdit;
     Label1: TLabel;
     MainMenu1: TMainMenu;
-    mnu19: TMenuItem;
+    mnu12Save: TMenuItem;
+    mnu24Print: TMenuItem;
+    mnu19Quit: TMenuItem;
     mnu32Shrink: TMenuItem;
     mnu33Fit: TMenuItem;
     mnu25Prev: TMenuItem;
@@ -30,20 +32,24 @@ type
     mnu2: TMenuItem;
     mnu11Open: TMenuItem;
     mnu1: TMenuItem;
-    mnu12Close: TMenuItem;
+    mnu13Close: TMenuItem;
     od1: TOpenDialog;
     Panel1: TPanel;
     Separator1: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    procedure mnu19Click(Sender: TObject);
+    procedure mnu12SaveClick(Sender: TObject);
+    procedure mnu19QuitClick(Sender: TObject);
+    procedure mnu24PrintClick(Sender: TObject);
     procedure mnu32ShrinkClick(Sender: TObject);
     procedure mnu33FitClick(Sender: TObject);
     procedure mnu25PrevClick(Sender: TObject);
     procedure mnu11OpenClick(Sender: TObject);
-    procedure mnu12CloseClick(Sender: TObject);
+    procedure mnu13CloseClick(Sender: TObject);
     procedure mnu21GetTextAtClick(Sender: TObject);
     procedure mnu22ReadTextClick(Sender: TObject);
     procedure mnu23WeblinkClick(Sender: TObject);
@@ -73,9 +79,25 @@ begin
   pdf1.OnWebLinkClick := @WebLinkClick;
 end;
 
-procedure TForm1.mnu19Click(Sender: TObject);
+procedure TForm1.mnu12SaveClick(Sender: TObject);
+var fn: String;
+begin
+  if not pdf1.Document.Active then Exit;
+  fn := ChangeFileExt(pdf1.Document.FileName, '~.pdf');
+  pdf1.Document.SaveToFile(fn);
+  pdf1.ShowHint := False;
+  Showmessage('File saves as ' + #13#10 +fn);
+end;
+
+procedure TForm1.mnu19QuitClick(Sender: TObject);
 begin
   Close
+end;
+
+procedure TForm1.mnu24PrintClick(Sender: TObject);
+begin
+  TPdfDocumentVclPrinter.PrintDocument(
+     pdf1.Document, ExtractFilename(pdf1.Document.FileName));
 end;
 
 procedure TForm1.mnu32ShrinkClick(Sender: TObject);
@@ -128,7 +150,7 @@ begin
     end;
 end;
 
-procedure TForm1.mnu12CloseClick(Sender: TObject);
+procedure TForm1.mnu13CloseClick(Sender: TObject);
 begin
   pdf1.Close;
   mnu2.Enabled:= False;

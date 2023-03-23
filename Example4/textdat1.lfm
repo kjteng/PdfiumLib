@@ -3,7 +3,7 @@ object Form1: TForm1
   Height = 439
   Top = 186
   Width = 657
-  Caption = 'Test: Text Data and Weblink in pdf'
+  Caption = 'Test: Text Data, Weblink, Print functions'
   ClientHeight = 419
   ClientWidth = 657
   Menu = MainMenu1
@@ -13,24 +13,24 @@ object Form1: TForm1
   LCLVersion = '2.2.2.0'
   object Panel1: TPanel
     Left = 0
-    Height = 34
+    Height = 27
     Top = 0
     Width = 657
     Align = alTop
-    ClientHeight = 34
+    ClientHeight = 27
     ClientWidth = 657
     TabOrder = 0
     object Edit1: TEdit
       Left = 265
       Height = 23
-      Top = 6
+      Top = 1
       Width = 137
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 161
       Height = 15
-      Top = 8
+      Top = 3
       Width = 86
       Caption = 'Text to highlight'
       ParentColor = False
@@ -39,7 +39,7 @@ object Form1: TForm1
       Left = 401
       Height = 25
       Hint = 'Highlight specified text'
-      Top = 6
+      Top = 1
       Width = 25
       Kind = bkOK
       ModalResult = 1
@@ -52,7 +52,7 @@ object Form1: TForm1
       Left = 429
       Height = 25
       Hint = 'Clear text highlight'
-      Top = 6
+      Top = 1
       Width = 25
       Cancel = True
       Kind = bkCancel
@@ -69,23 +69,30 @@ object Form1: TForm1
     object mnu1: TMenuItem
       Caption = '&File'
       object mnu11Open: TMenuItem
-        Caption = '&Open PDF'
+        Caption = '&Open'
         OnClick = mnu11OpenClick
       end
-      object mnu12Close: TMenuItem
-        Caption = 'Close'
-        OnClick = mnu12CloseClick
+      object mnu12Save: TMenuItem
+        Caption = 'Save'
+        OnClick = mnu12SaveClick
       end
-      object mnu19: TMenuItem
-        Caption = 'Exit'
-        OnClick = mnu19Click
+      object mnu13Close: TMenuItem
+        Caption = 'Close'
+        OnClick = mnu13CloseClick
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
+      object mnu19Quit: TMenuItem
+        Caption = 'Quit'
+        OnClick = mnu19QuitClick
       end
     end
     object mnu2: TMenuItem
-      Caption = 'Text Data'
+      Caption = 'Test'
       Enabled = False
       object mnu21GetTextAt: TMenuItem
-        Caption = 'GetTextAt'
+        Caption = 'Get Text'
         OnClick = mnu21GetTextAtClick
       end
       object mnu22ReadText: TMenuItem
@@ -93,12 +100,19 @@ object Form1: TForm1
         OnClick = mnu22ReadTextClick
       end
       object mnu23Weblink: TMenuItem
-        Caption = 'WebLink'
+        Caption = 'Read WebLink'
         OnClick = mnu23WeblinkClick
+      end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object mnu24Print: TMenuItem
+        Caption = 'Print pdf'
+        OnClick = mnu24PrintClick
       end
     end
     object mnu3: TMenuItem
-      Caption = 'Zoom'
+      Caption = 'View'
       object mnu31Enlarge: TMenuItem
         Caption = 'Enlarge'
         ShortCut = 16605
