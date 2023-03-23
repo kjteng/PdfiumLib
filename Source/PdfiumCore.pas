@@ -5,17 +5,18 @@
 }
 {$A8,B-,E-,F-,G+,H+,I+,J-,K-,M-,N-,P+,Q-,R-,S-,T-,U-,V+,X+,Z1}
 {$DEFINE FPC} // based on: https://github.com/ahausladen/PdfiumLib
-{$DEFINE FORM_ENABLED} // only need this for fillable pdf (pdf form)
+//{$DEFINE FORM_DISABLED}  // do not use fillable pdf (pdf form)
+//{$DEFINE VIEW_ONLY} // do not use TPdfDocumentVclPrinter/printer4lazarus
 
 {$STRINGCHECKS OFF}
 
 unit pdfiumcore;
 
-{$MODE Delphi} //for FPC port only
+{$MODE Delphi} //for FPC port
 
 interface
 
-uses   Dialogs,   FPImage, FPReadPNG, FPWritePNG,
+uses Dialogs,
 {$IFDEF FPC} LCLIntf, LCLType,  {$ELSE}  WinSpool,{$ENDIF}
   Windows, Types, SysUtils, Classes, Contnrs, PdfiumLib, Graphics;
 const
@@ -204,8 +205,9 @@ type
     function BeginWebLinks: Boolean;
     class function GetDrawFlags(const Options: TPdfPageRenderOptions): Integer; static;
     procedure AfterOpen;
-{$IFDEF FORM_ENABLED}
-    function IsValidForm: Boolean; {$ENDIF}
+{$IFNDEF FORM_DISABLED}
+    function IsValidForm: Boolean;
+{$ENDIF}
     function GetMouseModifier(const Shift: TShiftState): Integer;
     function GetKeyModifier(KeyData: LPARAM): Integer;
     function GetHandle: FPDF_PAGE;
@@ -219,7 +221,7 @@ type
       const Options: TPdfPageRenderOptions = []);
     procedure DrawToPdfBitmap(APdfBitmap: TPdfBitmap; X, Y, Width, Height: Integer; Rotate: TPdfPageRotation = prNormal;
       const Options: TPdfPageRenderOptions = []);
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     procedure DrawFormToPdfBitmap(APdfBitmap: TPdfBitmap; X, Y, Width, Height: Integer; Rotate: TPdfPageRotation = prNormal;
       const Options: TPdfPageRenderOptions = []);
 {$ENDIF}
@@ -230,7 +232,7 @@ type
 
     procedure ApplyChanges;
     procedure Flatten(AFlatPrint: Boolean);
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     function FormEventFocus(const Shift: TShiftState; PageX, PageY: Double): Boolean;
     function FormEventMouseWheel(const Shift: TShiftState; WheelDelta: Integer; PageX, PageY: Double): Boolean;
     function FormEventMouseMove(const Shift: TShiftState; PageX, PageY: Double): Boolean;
@@ -256,7 +258,7 @@ type
     function FindNext(var CharIndex, Count: Integer): Boolean;
     function FindPrev(var CharIndex, Count: Integer): Boolean;
     procedure EndFind;
-
+procedure ccount;
     function GetCharCount: Integer;
     function ReadChar(CharIndex: Integer): WideChar;
     function GetCharFontSize(CharIndex: Integer): Double;
@@ -269,7 +271,7 @@ type
     function GetTextRectCount(CharIndex, Count: Integer): Integer;
     function GetTextRect(RectIndex: Integer): TPdfRect;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     function HasFormFieldAtPoint(X, Y: Double): TPdfFormFieldType;
 {$ENDIF}
     function GetWebLinkCount: Integer;
@@ -369,7 +371,7 @@ type
     FClosing: Boolean;
     FUnsupportedFeatures: Boolean;
     FCustomLoadData: PCustomLoadDataRec;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     FForm: FPDF_FORMHANDLE;
     FFormFillHandler: TPdfFormFillHandler;
     FFormFieldHighlightColor: TColor;
@@ -400,11 +402,11 @@ type
     function GetPageMode: TPdfDocumentPageMode;
     function GetNumCopies: Integer;
     procedure DocumentLoaded;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     procedure SetFormFieldHighlightAlpha(Value: Integer);
     procedure SetFormFieldHighlightColor(const Value: TColor);
     procedure UpdateFormFieldHighlight;
- {$ENDIF}
+{$ENDIF}
     function FindPage(Page: FPDF_PAGE): TPdfPage;
 
   public
@@ -464,7 +466,7 @@ type
     // after accessing a page.
     property UnsupportedFeatures: Boolean read FUnsupportedFeatures;
     property Handle: FPDF_DOCUMENT read FDocument;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     property FormHandle: FPDF_FORMHANDLE read FForm;
     property FormFieldHighlightColor: TColor read FFormFieldHighlightColor write SetFormFieldHighlightColor default $FFE4DD;
     property FormFieldHighlightAlpha: Integer read FFormFieldHighlightAlpha write SetFormFieldHighlightAlpha default 100;
@@ -477,6 +479,7 @@ type
 {$ENDIF}
   end;
 
+{$IFNDEF VIEW_ONLY}
   TPdfDocumentPrinterStatusEvent = procedure(Sender: TObject; CurrentPageNum, PageCount: Integer) of object;
 
   TPdfDocumentPrinter = class(TObject)
@@ -523,9 +526,9 @@ type
     { OnPrintStatus is triggered after every printed page }
     property OnPrintStatus: TPdfDocumentPrinterStatusEvent read FOnPrintStatus write FOnPrintStatus;
   end;
+{$ENDIF}
 
 function SetThreadPdfUnsupportedFeatureHandler(const Handler: TPdfUnsupportedFeatureHandler): TPdfUnsupportedFeatureHandler;
-
 var
   PDFiumDllDir: string = '';
   PDFiumDllFileName: string = ''; // use this instead of PDFiumDllDir if you want to change the DLLs file name
@@ -722,7 +725,7 @@ begin
   end;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure FFI_Invalidate(pThis: PFPDF_FORMFILLINFO; page: FPDF_PAGE; left, top, right, bottom: Double); cdecl;
 var
   Handler: PPdfFormFillHandler;
@@ -882,7 +885,7 @@ begin
   end;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 function FFI_GetCurrentPage(pThis: PFPDF_FORMFILLINFO; document: FPDF_DOCUMENT): FPDF_PAGE; cdecl;
 var
   Handler: PPdfFormFillHandler;
@@ -912,7 +915,7 @@ begin
   // MoveMove event. Chrome/Edge don't rely on SetCursor either.
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure FFI_SetTextFieldFocus(pThis: PFPDF_FORMFILLINFO; value: FPDF_WIDESTRING; valueLen: FPDF_DWORD; is_focus: FPDF_BOOL); cdecl;
 var
   Handler: PPdfFormFillHandler;
@@ -974,7 +977,7 @@ begin
   FPages := TObjectList.Create;
   FAttachments := TPdfAttachmentList.Create(Self);
   FFileHandle := INVALID_HANDLE_VALUE;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   FFormFieldHighlightColor := $FFE4DD;
   FFormFieldHighlightAlpha := 100;
   FPrintHidesFormFieldHighlight := True;
@@ -999,7 +1002,7 @@ begin
 
     if FDocument <> nil then
     begin
- {$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
       if FForm <> nil then
       begin
         FORM_DoDocumentAAction(FForm, FPDFDOC_AACTION_WC);
@@ -1041,8 +1044,9 @@ begin
     end;
 
     FFileName := '';
-    {$IFDEF FORM_ENABLED}
-    FFormModified := False; {$ENDIF}
+{$IFNDEF FORM_DISABLED}
+    FFormModified := False;
+{$ENDIF}
   finally
     FClosing := False;
   end;
@@ -1268,12 +1272,12 @@ end;
 
 procedure TPdfDocument.DocumentLoaded;
 begin
-{$IFDEF FORM_ENABLED}  FFormModified := False;{$ENDIF}
+{$IFNDEF FORM_DISABLED} FFormModified := False;{$ENDIF}
   if FDocument = nil then
     RaiseLastPdfError;
 
   FPages.Count := FPDF_GetPageCount(FDocument);
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   FillChar(FFormFillHandler, SizeOf(TPdfFormFillHandler), 0);
   FFormFillHandler.Document := Self;
   FFormFillHandler.FormFillInfo.version := 1; // will be set to 2 if we use an XFA-enabled DLL
@@ -1307,7 +1311,7 @@ begin
   {$ENDIF}
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfDocument.UpdateFormFieldHighlight;
 begin
   FPDF_SetFormFieldHighlightColor(FForm, 0, {ColorToRGB}(FFormFieldHighlightColor));
@@ -1515,7 +1519,7 @@ begin
   FileWriteInfo.Inner.version := 1;
   FileWriteInfo.Inner.WriteBlock := @WriteBlockToStream;
   FileWriteInfo.Stream := Stream;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   if FForm <> nil then
   begin
     FORM_ForceToKillFocus(FForm); // also save the form field data that is currently focused
@@ -1526,7 +1530,7 @@ begin
     FPDF_SaveWithVersion(FDocument, @FileWriteInfo, Ord(Option), FileVersion)
   else
     FPDF_SaveAsCopy(FDocument, @FileWriteInfo, Ord(Option));
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   if FForm <> nil then
     FORM_DoDocumentAAction(FForm, FPDFDOC_AACTION_DS); // AfterSave
 {$ENDIF}
@@ -1609,7 +1613,7 @@ begin
   Close;
   FDocument := FPDF_CreateNewDocument;
   Result := FDocument <> nil;
-{$IFDEF FORM_ENABLED}  FFormModified := False; {$ENDIF}
+{$IFNDEF FORM_DISABLED} FFormModified := False; {$ENDIF}
 end;
 
 procedure TPdfDocument.DeletePage(Index: Integer);
@@ -1733,7 +1737,7 @@ begin
   Result := FPDF_SetPrintMode(Ord(PrintMode)) <> 0;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfDocument.SetFormFieldHighlightAlpha(Value: Integer);
 begin
   if Value < 0 then
@@ -1800,6 +1804,10 @@ end;
                              }
 
 { TPdfPage }
+procedure TPdfPage.ccount;
+begin
+  showmessage( FPDFPage_CountObjects(FPage).ToString)
+end;
 
 constructor TPdfPage.Create(ADocument: TPdfDocument; APage: FPDF_PAGE);
 begin
@@ -1818,7 +1826,7 @@ begin
 end;
 
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 function TPdfPage.IsValidForm: Boolean;
 begin
   Result := (FDocument <> nil) and (FDocument.FForm <> nil) and (FPage <> nil);
@@ -1830,7 +1838,7 @@ var
   OldCurDoc: TPdfDocument;
 begin
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   if IsValidForm then
   begin
     OldCurDoc := UnsupportedFeatureCurrentDocument;
@@ -1849,7 +1857,7 @@ end;
 
 procedure TPdfPage.Close;
 begin
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   if IsValidForm then
   begin
     FORM_DoPageAAction(FPage, FDocument.FForm, FPDFPAGE_AACTION_CLOSE);
@@ -1920,7 +1928,7 @@ begin
 
   if proPrinting in Options then
   begin
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     if IsValidForm and (FPDFPage_GetAnnotCount(FPage) > 0) then
     begin
       // Form content isn't printed unless it was flattend and the page was reloaded.
@@ -1954,7 +1962,7 @@ begin
         else
           PdfBmp.FillRect(0, 0, Width, Height, $FFFFFFFF);
         DrawToPdfBitmap(PdfBmp, 0, 0, Width, Height, Rotate, Options);
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
         DrawFormToPdfBitmap(PdfBmp, 0, 0, Width, Height, Rotate, Options);{$ENDIF}
       finally
         PdfBmp.Free;
@@ -1978,7 +1986,7 @@ begin
   FPDF_RenderPageBitmap(APdfBitmap.FBitmap, FPage, X, Y, Width, Height, Ord(Rotate), GetDrawFlags(Options));
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfPage.DrawFormToPdfBitmap(APdfBitmap: TPdfBitmap; X, Y, Width, Height: Integer;
   Rotate: TPdfPageRotation; const Options: TPdfPageRenderOptions);
 begin
@@ -2361,7 +2369,7 @@ begin
     Result := Result or FWL_EVENTFLAG_AltKey;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 function TPdfPage.FormEventFocus(const Shift: TShiftState; PageX, PageY: Double): Boolean;
 begin
   if IsValidForm then
@@ -3120,6 +3128,7 @@ begin
   GetContent(Result, Encoding);
 end;
 
+{$IFNDEF VIEW_ONLY}
 { TPdfDocumentPrinter }
 
 constructor TPdfDocumentPrinter.Create;
@@ -3213,7 +3222,7 @@ begin
   if BeginPrint then
   begin
     try
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
       if ADocument.FForm <> nil then
         FORM_DoDocumentAAction(ADocument.FForm, FPDFDOC_AACTION_WP); // BeforePrint
 {$ENDIF}
@@ -3261,7 +3270,7 @@ begin
           if not WasPageLoaded and (PdfPage <> nil) then
             PdfPage.Close; // release memory
         end;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
         if ADocument.FForm <> nil then
           FORM_DoDocumentAAction(ADocument.FForm, FPDFDOC_AACTION_DP); // AfterPrint
 {$ENDIF}
@@ -3272,6 +3281,7 @@ begin
     Result := True;
   end;
 end;
+
 
 procedure TPdfDocumentPrinter.InternPrintPage(APage: TPdfPage; X, Y, Width, Height: Double);
 
@@ -3317,6 +3327,7 @@ begin
     prNormal, [proPrinting, proAnnotations]
   );
 end;
+{$ENDIF}
 
 initialization
   InitializeCriticalSectionAndSpinCount(PDFiumInitCritSect, 4000);

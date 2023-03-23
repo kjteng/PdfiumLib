@@ -1,12 +1,13 @@
-{ 2023-03-19
+{ 2023-03-22
   FreePascal port for ahausladen/PdfiumLib (Updated to chromium/5052)
                                 https://github.com/ahausladen/PdfiumLib
   Tested with: Lazarus(ver2.2.2)/Freepascal(version 3.2.2)
 }
 {$A8,B-,E-,F-,G+,H+,I+,J-,K-,M-,N-,P+,Q-,R-,S-,T-,U-,V+,X+,Z1}
 {$DEFINE FPC}
-{$DEFINE FORM_ENABLED}  // only need this for fillable pdf (pdf form)
-// {$DEFINE VCL_PALETTE} // to install pdfCtrl component in VCL palette
+//{$DEFINE FORM_DISABLED}  // do not use fillable pdf (pdf form)
+//{$DEFINE VIEW_ONLY} // do not use TPdfDocumentVclPrinter/printer4lazarus
+//{$DEFINE VCL_PALETTE} // to install pdfCtrl component in VCL palette
 
 {$STRINGCHECKS OFF}
 
@@ -20,7 +21,7 @@ unit pdfiumctrl;
 interface
 
 uses
-  {$IFDEF FPC}LResources, PrintersDlgs,  LCLIntf, LCLType,{$ENDIF}
+  {$IFDEF FPC}LResources, {$IFNDEF VIEW_ONLY} PrintersDlgs,{$ENDIF}  LCLIntf, LCLType,{$ENDIF}
    Windows, Messages,
    Types, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, PdfiumCore;
 
@@ -61,8 +62,8 @@ type
     FSelectionActive: Boolean;
     FAllowUserTextSelection: Boolean;
     FAllowUserPageChange: Boolean;
-    {$IFDEF FORM_ENABLED}
-    FAllowFormEvents: Boolean; {$endif}
+    {$IFNDEF FORM_DISABLED}
+    FAllowFormEvents: Boolean; {$ENDIF}
     FBufferedPageDraw: Boolean;
     FSmoothScroll: Boolean;
     FScrollTimerActive: Boolean;
@@ -85,7 +86,7 @@ type
     FOnPageChange: TNotifyEvent;
     FOnPaint: TNotifyEvent;
     FFormOutputSelectedRects: TPdfRectArray;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     FFormFieldFocused: Boolean;  {$ENDIF}
     FPageShadowSize: Integer;
     FPageShadowColor: TColor;
@@ -139,7 +140,7 @@ type
     procedure FormInvalidate(Document: TPdfDocument; Page: TPdfPage; const PageRect: TPdfRect);
     procedure FormOutputSelectedRect(Document: TPdfDocument; Page: TPdfPage; const PageRect: TPdfRect);
     procedure FormGetCurrentPage(Document: TPdfDocument; var Page: TPdfPage);
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     procedure FormFieldFocus(Document: TPdfDocument; Value: PWideChar; ValueLen: Integer; FieldFocused: Boolean);
 {$ENDIF}
     procedure DrawAlphaSelection(DC: HDC; Page: TPdfPage; const ARects: TPdfRectArray);
@@ -153,10 +154,11 @@ type
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
 
-{$IFDEF FORM_ENABLED} procedure WMKeyDown(var Message: TWMKeyDown); message WM_KEYDOWN;
+{$IFNDEF FORM_DISABLED} procedure WMKeyDown(var Message: TWMKeyDown); message WM_KEYDOWN;
     procedure WMKeyUp(var Message: TWMKeyUp); message WM_KEYUP;
     procedure WMChar(var Message: TWMChar); message WM_CHAR;
-    procedure WMKillFocus(var Message: TWMKillFocus); message WM_KILLFOCUS;  {$ENDIF}
+    procedure WMKillFocus(var Message: TWMKillFocus); message WM_KILLFOCUS;
+{$ENDIF}
 
     procedure WebLinkClick(Url: string); virtual;
     procedure PageChange; virtual;
@@ -190,7 +192,7 @@ type
     function PageToDevice(PageX, PageY: Double): TPoint; overload;
     function PageToDevice(PageRect: TPdfRect): TRect; overload;
     function GetPageRect: TRect;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     procedure CopyFormTextToClipboard;
     procedure CutFormTextToClipboard;
     procedure PasteFormTextFromClipboard;
@@ -233,7 +235,7 @@ type
     property BufferedPageDraw: Boolean read FBufferedPageDraw write FBufferedPageDraw default True;
     property AllowUserTextSelection: Boolean read FAllowUserTextSelection write FAllowUserTextSelection default True;
     property AllowUserPageChange: Boolean read FAllowUserPageChange write FAllowUserPageChange default True; // PgDn/PgUp
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     property AllowFormEvents: Boolean read FAllowFormEvents write FAllowFormEvents default True; {$endif}
     property DrawOptions: TPdfPageRenderOptions read FDrawOptions write SetDrawOptions default cPdfControlDefaultDrawOptions;
     property SmoothScroll: Boolean read FSmoothScroll write FSmoothScroll default False;
@@ -292,7 +294,7 @@ type
     {$IFEND}
 {$ENDIF}
   end;
-
+{$IFNDEF VIEW_ONLY}
   TPdfDocumentVclPrinter = class(TPdfDocumentPrinter)
   private
     FBeginDocCalled: Boolean;
@@ -312,6 +314,7 @@ type
       AShowPrintDialog: Boolean = True; AllowPageRange: Boolean = True; 
       AParentWnd: HWND = 0): Boolean; static;
   end;
+{$ENDIF}
 
 {$IFDEF FPC}
 procedure AlphaBlend(DC: HDC; X, Y, Width, Height: Integer;
@@ -357,6 +360,7 @@ begin
   Result := not Printer.Aborted;
 end;
 
+{$IFNDEF VIEW_ONLY}
 { TPdfDocumentVclPrinter }
 
 function TPdfDocumentVclPrinter.PrinterStartDoc(const AJobTitle: string): Boolean;
@@ -475,6 +479,7 @@ begin
     PdfPrinter.Free;
   end;
 end;
+{$ENDIF}
 
 { TPdfControl }
 
@@ -489,8 +494,9 @@ begin
   FRotation := prNormal;
   FAllowUserTextSelection := True;
   FAllowUserPageChange := True;
-{$IFDEF FORM_ENABLED}
-  FAllowFormEvents := True; {$ENDIF}
+{$IFNDEF FORM_DISABLED}
+  FAllowFormEvents := True;
+{$ENDIF}
   FDrawOptions := cPdfControlDefaultDrawOptions;
   FScrollTimer := True;
   FBufferedPageDraw := True;
@@ -501,7 +507,7 @@ begin
   FPageShadowPadding := 44;
 
   FDocument := TPdfDocument.Create;
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   FDocument.OnFormInvalidate := FormInvalidate;
   FDocument.OnFormOutputSelectedRect := FormOutputSelectedRect;
   FDocument.OnFormGetCurrentPage := FormGetCurrentPage;
@@ -1097,8 +1103,9 @@ procedure TPdfControl.Close;
 begin
   FDocument.Close;
   FPageIndex := 0;
-{$IFDEF FORM_ENABLED}
-  FFormFieldFocused := False; {$ENDIF}
+{$IFNDEF FORM_DISABLED}
+  FFormFieldFocused := False;
+{$ENDIF}
   PageContentChanged(True);
 end;
 
@@ -1305,7 +1312,7 @@ begin
   Page := CurrentPage;
   if Page <> nil then
   begin
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     if AllowFormEvents then
     begin
       PagePt := DeviceToPage(X, Y);
@@ -1323,7 +1330,7 @@ begin
       end;
     end;
  {$ENDIF}
-    if AllowUserTextSelection {$IFDEF FORM_ENABLED} and not FFormFieldFocused {$ENDIF} then
+    if AllowUserTextSelection {$IFNDEF FORM_DISABLED} and not FFormFieldFocused {$ENDIF} then
     begin
       if Button = mbLeft then
       begin
@@ -1362,7 +1369,7 @@ var
 begin
   inherited MouseUp(Button, Shift, X, Y);
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
   if AllowFormEvents and IsPageValid then
   begin
     PagePt := DeviceToPage(X, Y);
@@ -1388,7 +1395,7 @@ begin
     begin
       FMousePressed := False;
       StopScrollTimer;
-      if AllowUserTextSelection {$IFDEF FORM_ENABLED} and not FFormFieldFocused {$ENDIF} then
+      if AllowUserTextSelection {$IFNDEF FORM_DISABLED} and not FFormFieldFocused {$ENDIF} then
         SetSelStopCharIndex(X, Y);
       if not FSelectionActive and IsWebLinkAt(X, Y, Url) then
         WebLinkClick(Url);
@@ -1406,7 +1413,7 @@ begin
   inherited MouseMove(Shift, X, Y);
   NewCursor := Cursor;
   try
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     if AllowFormEvents and IsPageValid then
     begin
       PagePt := DeviceToPage(X, Y);
@@ -1426,7 +1433,7 @@ begin
       end;
     end;
 {$ENDIF}
-    if AllowUserTextSelection {$IFDEF FORM_ENABLED} and not FFormFieldFocused {$ENDIF} then
+    if AllowUserTextSelection {$IFNDEF FORM_DISABLED} and not FFormFieldFocused {$ENDIF} then
     begin
       if FMousePressed then
       begin
@@ -1498,7 +1505,7 @@ begin
   Clipboard.AsText := GetSelText;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfControl.CopyFormTextToClipboard;
 var
   S: string;
@@ -1896,7 +1903,7 @@ begin
   end;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfControl.WMKeyDown(var Message: TWMKeyDown);
 var
   ShiftState: TShiftState;
@@ -2323,7 +2330,7 @@ begin
 
   if not Result then
   begin
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
     if IsPageValid and AllowFormEvents then
     begin
       PagePt := DeviceToPage(MousePos.X, MousePos.Y);
@@ -2477,7 +2484,7 @@ begin
   Page := CurrentPage;
 end;
 
-{$IFDEF FORM_ENABLED}
+{$IFNDEF FORM_DISABLED}
 procedure TPdfControl.FormFieldFocus(Document: TPdfDocument; Value: PWideChar;
   ValueLen: Integer; FieldFocused: Boolean);
 begin
