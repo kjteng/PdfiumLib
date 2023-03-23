@@ -16,10 +16,14 @@ Another directive {$ifndef FPC} ...{$endif} is used to exclude parts of orignal 
 
 A new method PgToPNG(idx: integer; png: TPortableNetworkGraphic) has been added. the purpose of this method is to convert a specific page of the pdf to bitmap.
 
-Please ensure that Printer4Lazarus package is added to you project as it is REQUIRED for the components. Also, the component will not work with pdfium.dll dated on or before 2/3/2017 due to changes in the names of certain export functions. 
+Please ensure that Printer4Lazarus package is added to you project as it is REQUIRED for the components. Alternatively, you may uncomment the lines {$DEFINE VIEW_ONLY} if you are sure that your do not need the TVCLPrinter componet and thus do not require Printer4Lazarus. 
+
+Note the component will not work with pdfium.dll dated on or before 2/3/2017 due to changes in the names of certain export functions. 
 
 A pdflib.dpk file (and also Tpdfcontrol.lrs) is also included for those who wish to place the TPdfControl to the component palette in Lazarus. Before installing the dpk, please remember to uncomment the line containing {$DEFINE VCL_PALETTE} in pdfiumctrl.pas. You may also need to delete the files in project\lib\ folder to ensure a clean start.
 
 The Example1 (PdfiumLibExample) is also originated from Andreas Hausladen's site, with some minor modification for Lazarus.
+
+
 
 All the codes are distributed/released under MPL-2.0 license.	
