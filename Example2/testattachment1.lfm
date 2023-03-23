@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 330
+  Left = 399
   Height = 517
-  Top = 209
+  Top = 106
   Width = 852
-  Caption = 'Test Attachment'
+  Caption = 'Test: Attachment'
   ClientHeight = 497
   ClientWidth = 852
   Menu = MainMenu1
@@ -66,20 +66,23 @@ object Form1: TForm1
     object mnu1OpenPdf: TMenuItem
       Caption = '&File'
       object mnu11Open: TMenuItem
-        Caption = '&Open PDF'
+        Caption = '&Open'
         OnClick = mnu11OpenClick
       end
       object mnu12Save: TMenuItem
-        Caption = 'Save PDF'
+        Caption = 'Save'
         OnClick = mnu12SaveClick
       end
-      object mnu18Close: TMenuItem
-        Caption = 'Close PDF'
-        OnClick = mnu18CloseClick
+      object mnu13Close: TMenuItem
+        Caption = 'Close'
+        OnClick = mnu13CloseClick
       end
-      object mnu19Exit: TMenuItem
-        Caption = 'Exit'
-        OnClick = mnu19ExitClick
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object mnu19Quit: TMenuItem
+        Caption = 'Quit'
+        OnClick = mnu19QuitClick
       end
     end
     object mnu2: TMenuItem
@@ -93,13 +96,16 @@ object Form1: TForm1
         Caption = 'Delete Attachment'
         OnClick = mnu22DelClick
       end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
       object mnu23: TMenuItem
         Caption = 'Convert Page to Image'
         OnClick = mnu23PgImgClick
       end
     end
     object mnu3: TMenuItem
-      Caption = 'Zoom/Navigate'
+      Caption = 'View'
       object mnu31Enlarge: TMenuItem
         Caption = 'Enlarge'
         ShortCut = 16603

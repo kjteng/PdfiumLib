@@ -95,13 +95,7 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="kj_vcl"/>
-      </Item>
-      <Item>
         <PackageName Value="Printer4Lazarus"/>
-      </Item>
-      <Item>
-        <PackageName Value="kj_units"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>

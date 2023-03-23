@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="testAttachment.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="35" Y="5"/>
+        <CursorPos Y="15"/>
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -21,11 +21,11 @@
         <UnitName Value="testAttachment1"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="235"/>
-        <CursorPos X="31" Y="240"/>
+        <TopLine Value="167"/>
+        <CursorPos X="3" Y="170"/>
         <UsageCount Value="211"/>
         <Bookmarks Count="1">
-          <Item0 X="18" Y="127" ID="1"/>
+          <Item0 X="18" Y="129" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -246,16 +246,14 @@
         <Filename Value="PdfiumCtrl.pas"/>
         <UnitName Value="pdfiumctrl"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="7"/>
-        <CursorPos X="29" Y="3"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="296"/>
+        <CursorPos X="19" Y="301"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="PdfiumCore.pas"/>
         <UnitName Value="pdfiumcore"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="2763"/>
-        <CursorPos X="29" Y="2780"/>
         <UsageCount Value="22"/>
         <Bookmarks Count="1">
           <Item0 Y="2707" ID="1"/>
@@ -290,18 +288,16 @@
       <Unit>
         <Filename Value="C:\lazarus\components\kj\kj_units\PdfiumCtrl.pas"/>
         <UnitName Value="pdfiumctrl"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="195"/>
         <CursorPos X="22" Y="214"/>
         <UsageCount Value="19"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\kj\kj_units\PdfiumCore.pas"/>
         <UnitName Value="pdfiumcore"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="19"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\kj\kj_units\PdfiumLib.pas"/>
@@ -356,99 +352,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Fillable1"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="93"/>
-        <CursorPos Y="102"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="94"/>
+        <CursorPos X="76" Y="94"/>
+        <UsageCount Value="12"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="208" Column="6" TopLine="184"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="188" Column="38" TopLine="186"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="187" Column="38" TopLine="185"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="186" Column="38" TopLine="184"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="185" Column="38" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="184" Column="38" TopLine="182"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="183" Column="38" TopLine="181"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="182" Column="38" TopLine="180"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="199" Column="37" TopLine="179"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="200" Column="37" TopLine="180"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="201" Column="37" TopLine="181"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="202" Column="37" TopLine="182"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="203" Column="37" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="204" Column="37" TopLine="184"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="205" Column="37" TopLine="185"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="48" Column="31" TopLine="37"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="195" Column="24" TopLine="185"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="230" Column="51" TopLine="215"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="119" TopLine="116"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="237" Column="24" TopLine="225"/>
-      </Position>
-      <Position>
-        <Filename Value="testattachment1.pas"/>
-        <Caret Line="241" Column="12" TopLine="226"/>
-      </Position>
+    <JumpHistory HistoryIndex="18">
       <Position>
         <Filename Value="testattachment1.pas"/>
         <Caret Line="256" TopLine="232"/>
@@ -460,10 +370,6 @@
       <Position>
         <Filename Value="testattachment1.pas"/>
         <Caret Line="260" Column="23" TopLine="236"/>
-      </Position>
-      <Position>
-        <Filename Value="..\Example3\fillable1.pas"/>
-        <Caret Line="7" Column="36"/>
       </Position>
       <Position>
         <Filename Value="testattachment1.pas"/>
@@ -483,7 +389,50 @@
       </Position>
       <Position>
         <Filename Value="testattachment1.pas"/>
-        <Caret Line="236" TopLine="236"/>
+        <Caret Line="236" Column="9" TopLine="193"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="158" Column="11" TopLine="150"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="208" Column="3" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="210" Column="36" TopLine="58"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="6" Column="88"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="4" Column="46"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="7" Column="41"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="216" Column="23" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="156" Column="31" TopLine="148"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="168" Column="3" TopLine="165"/>
+      </Position>
+      <Position>
+        <Filename Value="testattachment1.pas"/>
+        <Caret Line="169" Column="3" TopLine="166"/>
       </Position>
     </JumpHistory>
     <RunParams>

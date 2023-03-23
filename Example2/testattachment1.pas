@@ -25,8 +25,8 @@ type
     mnu35Next: TMenuItem;
     mnu3: TMenuItem;
     mnu2: TMenuItem;
-    mnu19Exit: TMenuItem;
-    mnu18Close: TMenuItem;
+    mnu19Quit: TMenuItem;
+    mnu13Close: TMenuItem;
     mnu21Attach: TMenuItem;
     mnu22Del: TMenuItem;
     mnu23: TMenuItem;
@@ -35,6 +35,8 @@ type
     mnu1OpenPdf: TMenuItem;
     od1: TOpenDialog;
     Separator1: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure lbox1SelectionChange(Sender: TObject; User: boolean);
@@ -46,8 +48,8 @@ type
     procedure mnu21AttachClick(Sender: TObject);
     procedure mnu22DelClick(Sender: TObject);
     procedure mnu12SaveClick(Sender: TObject);
-    procedure mnu18CloseClick(Sender: TObject);
-    procedure mnu19ExitClick(Sender: TObject);
+    procedure mnu13CloseClick(Sender: TObject);
+    procedure mnu19QuitClick(Sender: TObject);
     procedure mnu31EnlargeClick(Sender: TObject);
     procedure mnu34PrevClick(Sender: TObject);
     procedure mnu35NextClick(Sender: TObject);
@@ -157,7 +159,7 @@ begin
         ListAttachments;
         mnu2.Enabled := pdf1.Document.Active;
       except
-        mnu18CloseClick(nil);
+        mnu13CloseClick(nil);
       end;
     end;
 end;
@@ -212,7 +214,7 @@ begin
   Showmessage('File saves as ' + #13#10 +fn);
 end;
 
-procedure TForm1.mnu18CloseClick(Sender: TObject);
+procedure TForm1.mnu13CloseClick(Sender: TObject);
 begin
 //  Memo1.Clear; lbox1.Clear; GroupBox1.Caption := 'Attachment';
   if not pdf1.Document.Active then Exit;
@@ -221,7 +223,7 @@ begin
   mnu2.Enabled := False;
 end;
 
-procedure TForm1.mnu19ExitClick(Sender: TObject);
+procedure TForm1.mnu19QuitClick(Sender: TObject);
 begin
   Close;
 end;
