@@ -26,7 +26,7 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="kj_units"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>

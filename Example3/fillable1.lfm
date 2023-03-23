@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 343
+  Left = 426
   Height = 439
-  Top = 186
+  Top = 185
   Width = 657
-  Caption = 'Test Fillable PDF Form'
+  Caption = 'Test: Fillable PDF Form'
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,24 +15,27 @@ object Form1: TForm1
     object mnu1: TMenuItem
       Caption = '&File'
       object mnu11Open: TMenuItem
-        Caption = '&Open PDF'
+        Caption = '&Open'
         OnClick = mnu11OpenClick
       end
       object mnu12Save: TMenuItem
-        Caption = 'Save PDF'
+        Caption = 'Save'
         OnClick = mnu12SaveClick
       end
       object mnu13Close: TMenuItem
-        Caption = 'Close PDF'
+        Caption = 'Close'
         OnClick = mnu13CloseClick
       end
-      object mnu14Exit: TMenuItem
-        Caption = 'Exit'
-        OnClick = mnu14ExitClick
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object mnu14Quit: TMenuItem
+        Caption = 'Quit'
+        OnClick = mnu14QuitClick
       end
     end
     object mnu2: TMenuItem
-      Caption = 'Form_Methods'
+      Caption = 'Test'
       Enabled = False
       object mnu21FocusedText: TMenuItem
         Caption = 'Focused Text'
@@ -46,6 +49,9 @@ object Form1: TForm1
         Caption = 'Replace Selected Text'
         OnClick = mnu23ReplaceTextClick
       end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
       object mnu24Undo: TMenuItem
         Caption = 'Undo'
         OnClick = mnu24UndoClick
@@ -56,7 +62,7 @@ object Form1: TForm1
       end
     end
     object mnu3: TMenuItem
-      Caption = 'Zoom/Navigate'
+      Caption = 'View'
       object mnu31Enlarge: TMenuItem
         Caption = 'Enlarge'
         ShortCut = 16605

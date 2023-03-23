@@ -5,7 +5,7 @@ unit Fillable1;
 interface
 
 uses   pdfiumCtrl, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus,
-  StdCtrls, ActnList;
+   ActnList;
 
 type
 
@@ -17,7 +17,7 @@ type
     mnu33Fit: TMenuItem;
     mnu34Prev: TMenuItem;
     mnu35Next: TMenuItem;
-    mnu14Exit: TMenuItem;
+    mnu14Quit: TMenuItem;
     mnu13Close: TMenuItem;
     mnu31Enlarge: TMenuItem;
     mnu3: TMenuItem;
@@ -32,6 +32,8 @@ type
     mnu12Save: TMenuItem;
     od1: TOpenDialog;
     Separator1: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure mnu31EnlargeClick(Sender: TObject);
@@ -41,7 +43,7 @@ type
     procedure mnu13CloseClick(Sender: TObject);
     procedure mnu11OpenClick(Sender: TObject);
     procedure mnu12SaveClick(Sender: TObject);
-    procedure mnu14ExitClick(Sender: TObject);
+    procedure mnu14QuitClick(Sender: TObject);
     procedure mnu21FocusedTextClick(Sender: TObject);
     procedure mnu22SelectedTextClick(Sender: TObject);
     procedure mnu23ReplaceTextClick(Sender: TObject);
@@ -122,11 +124,16 @@ begin
 end;
 
 procedure TForm1.mnu12SaveClick(Sender: TObject);
+var fn: String;
 begin
-  pdf1.Document.SaveToFile('tmp.pdf');
+  if not pdf1.Document.Active then Exit;
+  fn := ChangeFileExt(pdf1.Document.FileName, '~.pdf');
+  pdf1.Document.SaveToFile(fn);
+  pdf1.ShowHint := False;
+  Showmessage('File saves as ' + #13#10 +fn);
 end;
 
-procedure TForm1.mnu14ExitClick(Sender: TObject);
+procedure TForm1.mnu14QuitClick(Sender: TObject);
 begin
   Close
 end;
