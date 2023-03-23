@@ -60,12 +60,14 @@ uses
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
+  (*
   {$IFDEF CPUX64}
     PDFiumDllDir := ExtractFilePath(ParamStr(0)) + 'x64\';
 
   {$ELSE}
   PDFiumDllDir := ExtractFilePath(ParamStr(0)) + 'x86';
   {$ENDIF CPUX64}
+  *)
   FCtrl := TPdfControl.Create(Self);
   FCtrl.Align := alClient;
   FCtrl.Parent := Self;

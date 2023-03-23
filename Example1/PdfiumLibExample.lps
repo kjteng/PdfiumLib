@@ -8,8 +8,7 @@
       <Unit>
         <Filename Value="PdfiumLibExample.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <CursorPos X="9" Y="7"/>
+        <CursorPos X="10" Y="3"/>
         <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit>
@@ -20,13 +19,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFrm"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="44"/>
-        <CursorPos X="64" Y="60"/>
+        <EditorIndex Value="1"/>
         <UsageCount Value="58"/>
         <Bookmarks Count="2">
-          <Item0 Y="210" ID="1"/>
-          <Item1 Y="121" ID="2"/>
+          <Item0 Y="212" ID="1"/>
+          <Item1 Y="123" ID="2"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -118,8 +115,17 @@
         <CursorPos X="14"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="PdfiumCore.pas"/>
+        <UnitName Value="pdfiumcore"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="38" Y="9"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="2">
+    <JumpHistory HistoryIndex="6">
       <Position>
         <Filename Value="PdfiumLibExample.lpr"/>
         <Caret Column="25"/>
@@ -131,6 +137,21 @@
       <Position>
         <Filename Value="mainfrm.pas"/>
         <Caret Line="7" Column="18"/>
+      </Position>
+      <Position>
+        <Filename Value="mainfrm.pas"/>
+        <Caret Line="13" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="mainfrm.pas"/>
+        <Caret Line="77" Column="24" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="mainfrm.pas"/>
+        <Caret Line="100" Column="23" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="mainfrm.pas"/>
       </Position>
     </JumpHistory>
     <RunParams>
