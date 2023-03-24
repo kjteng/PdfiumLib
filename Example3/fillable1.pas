@@ -5,7 +5,7 @@ unit Fillable1;
 interface
 
 uses   pdfiumCtrl, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus,
-   ActnList;
+   ActnList, StdCtrls;
 
 type
 
@@ -34,6 +34,7 @@ type
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
+    tx1: TStaticText;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure mnu31EnlargeClick(Sender: TObject);
@@ -50,6 +51,7 @@ type
     procedure mnu24UndoClick(Sender: TObject);
     procedure mnu25RedoClick(Sender: TObject);
     procedure mnu35NextClick(Sender: TObject);
+    procedure tx1MouseLeave(Sender: TObject);
   private
 
   public
@@ -140,14 +142,15 @@ end;
 
 procedure TForm1.mnu21FocusedTextClick(Sender: TObject);
 begin
-  Showmessage('FormGetFocusedText :-'+#13#10
-                   +pdf1.CurrentPage.FormGetFocusedText);
+  tx1.caption := 'FormGetFocusedText: '
+                  +QuotedStr(pdf1.CurrentPage.FormGetFocusedText);
+  tx1.BringToFront;
 end;
 
 procedure TForm1.mnu22SelectedTextClick(Sender: TObject);
 begin
-  Showmessage('FormGetSelectedText :-'+#13#10
-              +pdf1.CurrentPage.FormGetSelectedText);
+  tx1.caption := 'FormGetSelectedText: '
+                    +QuotedStr(pdf1.CurrentPage.FormGetSelectedText);
 end;
 
 procedure TForm1.mnu23ReplaceTextClick(Sender: TObject);
@@ -175,6 +178,11 @@ end;
 procedure TForm1.mnu35NextClick(Sender: TObject);
 begin
   pdf1.GotoNextPage;
+end;
+
+procedure TForm1.tx1MouseLeave(Sender: TObject);
+begin
+  tx1.Caption :=''
 end;
 
 end.
