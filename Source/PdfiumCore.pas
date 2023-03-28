@@ -11,9 +11,9 @@
 {$STRINGCHECKS OFF}
 
 unit pdfiumcore;
-
+{$IFDEF FPC}
 {$MODE Delphi} //for FPC port
-
+{$ENDIF}
 interface
 
 uses Dialogs,
