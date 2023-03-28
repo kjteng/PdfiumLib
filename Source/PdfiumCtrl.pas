@@ -12,9 +12,9 @@
 {$STRINGCHECKS OFF}
 
 unit pdfiumctrl;
-
+{$IFDEF FPC}
 {$MODE Delphi}  //for FPC port only
-
+{$ENDIF}
 // Show invalidated paint regions. Don't enable this if you aren't trying to optimize the repainting
 {.$DEFINE REPAINTTEST}
 
