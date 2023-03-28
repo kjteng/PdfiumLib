@@ -14,8 +14,8 @@
 // DLL Version: chromium/5052
 
 unit pdfiumlib;
-
-{$MODE Delphi} //for FPC port only
+{$IFDEF FPC}
+{$MODE Delphi} {$ENDIF}
 {$SCOPEDENUMS ON}
 
 {.$DEFINE DLLEXPORT} // stdcall in WIN32 instead of CDECL in WIN32 (The library switches between those from release to release)
