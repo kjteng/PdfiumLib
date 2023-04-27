@@ -14,7 +14,7 @@ The library/components works on some of my personal project (mainly to render pd
 All the amendments/changes for the freepascal port are kept within {$ifdef FPC} ...{$endif} block. 
 Another directive {$ifndef FPC} ...{$endif} is used to exclude parts of orignal codes that are not applicable for free pascal. This way the original source shall be intact if the we comment out the line containing {$DEFINE FPC}.
 
-A new method PgToPNG(idx: integer; png: TPortableNetworkGraphic) has been added. the purpose of this method is to convert a specific page of the pdf to bitmap.
+A new method PgToPNG(idx: integer; png: TPortableNetworkGraphic) has been added. the purpose of this method is to convert a specific page of the pdf to an image.
 
 Please ensure that Printer4Lazarus package is added to you project as it is REQUIRED for the components. Alternatively, you may uncomment the lines {$DEFINE VIEW_ONLY} if you are sure that your do not need the TVCLPrinter componet and thus do not require Printer4Lazarus. 
 
