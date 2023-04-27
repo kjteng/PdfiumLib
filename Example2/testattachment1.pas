@@ -109,9 +109,9 @@ begin
     begin
       Att := pdf1.Document.Attachments[ii];
       tx := memo1.text;
-      if (att.Name.IndexOf('utf16') >-1) or  (att.Name.IndexOf('unicode') >-1)then  // filename NOT containing utf8, default to be utf8 encoding
+      if (att.Name.IndexOf('utf16') >-1) or  (att.Name.IndexOf('unicode') >-1) then  // filename contains 'utf16' or 'unicode', default to utf16 encoding
         att.SetContent(tx, TEncoding.Unicode)
-      else
+      else //default utf8
         att.SetContent(tx);
       pdf1.ShowHint:= True;
     end;
